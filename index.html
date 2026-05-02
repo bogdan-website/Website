@@ -1,574 +1,1006 @@
 <!DOCTYPE html>
+<!-- Tells the browser this is an HTML5 document — must be the very first line -->
 <html lang="en">
+<!-- lang="en" tells screen readers and search engines the page is in English -->
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bogdan Siric - Full-Stack Developer & Designer</title>
-    <meta name="description" content="Professional portfolio of Bogdan Siric, Full-Stack Developer and UI/UX Designer specializing in React, TypeScript, and modern web technologies.">
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- <head> contains metadata — nothing in here is visible on the page itself -->
+
+  <!-- UTF-8 encoding supports all characters including accented letters and symbols -->
+  <meta charset="UTF-8"/>
+
+  <!-- Makes the page responsive on mobile: sets the visible width to the device screen width
+       and prevents the browser from zooming out to fit a desktop-sized layout -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- The tab title shown in the browser and in search engine results -->
+  <title>Bogdan Siric — Bench Joiner</title>
+
+  <!-- Short description used by search engines (Google, Bing) in result snippets.
+       Aim for 150-160 characters for best SEO. -->
+  <meta name="description" content="Bogdan Siric — Bench Joinery student at Building Crafts College. Precision timber work, hand tools, technical drawings. Greater London."/>
+
+  <!-- Tells the browser to open a connection to Google Fonts early, before the
+       font stylesheet request is made — this speeds up font loading slightly -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <!-- Loads two Google Fonts: Bebas Neue (display headings) and DM Sans (body text).
+       The ital,wght parameters request specific weights and italic variants only,
+       keeping the file size smaller than loading everything. -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+  <!-- Links to the external CSS file — all visual styling lives in styles.css.
+       This file must be in the same folder as index.html on your server. -->
+  <link rel="stylesheet" href="styles.css">
+
 </head>
+
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#home" class="nav-logo">Bogdan Siric</a>
-            
-            <!-- Desktop Navigation -->
-            <div class="nav-menu">
-                <a href="#home" class="nav-link active" data-page="home">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                        <polyline points="9,22 9,12 15,12 15,22"/>
-                    </svg>
-                    Home
-                </a>
-                <a href="#about" class="nav-link" data-page="about">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                    About Me
-                </a>
-                <a href="#projects" class="nav-link" data-page="projects">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-                    </svg>
-                    Projects
-                </a>
-            </div>
+<!-- Everything visible on the page goes inside <body> -->
 
-            <!-- Mobile menu button -->
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+
+  <!-- ══════════════════════════════════════════════════
+       CUSTOM CURSOR
+       A small gold dot that tracks the mouse position.
+       JavaScript at the bottom of the page moves it.
+       ══════════════════════════════════════════════════ -->
+  <!-- id="cursor" lets JavaScript find and move this element -->
+  <div class="cursor" id="cursor"></div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       NAVIGATION BAR
+       Fixed to the top of the screen at all times.
+       Each link uses data-page to tell JavaScript which
+       section to show — no page reloads, all in-page.
+       ══════════════════════════════════════════════════ -->
+  <nav>
+
+    <!-- Logo area — clicking this takes you back to the home page.
+         data-page="home" is read by the JS page-switching function. -->
+    <a class="nav-logo" href="#" data-page="home">
+      <!-- Logo image — styled white via CSS filter. Must be in same folder as index.html -->
+      <img src="logo.png" alt="Bogdan Siric logo">
+      <!-- Text version of the logo beside the image -->
+      <span class="nav-logo-text">Bogdan Siric</span>
+    </a>
+
+    <!-- Right side of the nav bar: links + CTA button -->
+    <div class="nav-right">
+      <ul class="nav-links">
+        <!-- class="active" on the Home link highlights it as the current page on load -->
+        <li><a href="#" data-page="home" class="active">Home</a></li>
+        <li><a href="#" data-page="work">My Work</a></li>
+        <li><a href="#" data-page="about">About</a></li>
+      </ul>
+      <!-- mailto: link opens the user's email client with your address pre-filled -->
+      <a href="mailto:bogdansiric7@gmail.com" class="btn-nav">Hire Me</a>
+    </div>
+
+    <!-- Hamburger icon — three <span> elements styled as lines in CSS.
+         id="hamburger" lets JavaScript toggle the mobile menu open/closed. -->
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+  </nav>
+
+  <!-- Mobile dropdown menu — hidden by default, shown when .open class is added by JS.
+       id="mobileNav" is referenced in the JavaScript at the bottom. -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#" data-page="home">Home</a>
+    <a href="#" data-page="work">My Work</a>
+    <a href="#" data-page="about">About</a>
+    <!-- Direct mailto link for mobile users who may not see the nav CTA -->
+    <a href="mailto:bogdansiric7@gmail.com">Contact</a>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       TICKER / SCROLLING BANNER
+       Sits below the nav bar. The inner div is duplicated
+       in HTML so the CSS animation loops seamlessly.
+       ══════════════════════════════════════════════════ -->
+  <div class="ticker">
+    <div class="ticker-inner">
+      <!-- First set of items — visible as the strip scrolls left -->
+      <span class="t-item"><span>◆</span> Bench Joinery</span>
+      <span class="t-item"><span>◆</span> Building Crafts College</span>
+      <span class="t-item"><span>◆</span> Level 2 Diploma</span>
+      <span class="t-item"><span>◆</span> Greater London</span>
+      <span class="t-item"><span>◆</span> Timber Joints</span>
+      <span class="t-item"><span>◆</span> Hand Tools</span>
+      <span class="t-item"><span>◆</span> Technical Drawings</span>
+      <span class="t-item"><span>◆</span> Open to Opportunities</span>
+      <!-- Exact duplicate of the above — the CSS animation moves to -50% width,
+           so when the first set scrolls off screen the duplicate fills its place,
+           creating a seamless infinite loop without JavaScript. -->
+      <span class="t-item"><span>◆</span> Bench Joinery</span>
+      <span class="t-item"><span>◆</span> Building Crafts College</span>
+      <span class="t-item"><span>◆</span> Level 2 Diploma</span>
+      <span class="t-item"><span>◆</span> Greater London</span>
+      <span class="t-item"><span>◆</span> Timber Joints</span>
+      <span class="t-item"><span>◆</span> Hand Tools</span>
+      <span class="t-item"><span>◆</span> Technical Drawings</span>
+      <span class="t-item"><span>◆</span> Open to Opportunities</span>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       HOME PAGE
+       id="home" matches the data-page="home" on nav links.
+       class="page active" means this is shown on first load.
+       All other pages have class="page" only (hidden).
+       ══════════════════════════════════════════════════ -->
+  <section id="home" class="page active">
+
+
+    <!-- ── HERO ── -->
+    <!-- Two-column layout: text left, images right -->
+    <div class="hero">
+
+      <!-- Left column: tagline, name, description, buttons, social links -->
+      <div class="hero-l">
+
+        <!-- Small location/category label at the very top -->
+        <div>
+          <div class="hero-tag">Bench Joinery · Greater London</div>
         </div>
 
-        <!-- Mobile Navigation -->
-        <div class="mobile-menu">
-            <a href="#home" class="mobile-nav-link" data-page="home">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                    <polyline points="9,22 9,12 15,12 15,22"/>
-                </svg>
-                Home
-            </a>
-            <a href="#about" class="mobile-nav-link" data-page="about">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                </svg>
-                About Me
-            </a>
-            <a href="#projects" class="mobile-nav-link" data-page="projects">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-                </svg>
-                Projects
-            </a>
-        </div>
-    </nav>
+        <!-- Main heading block -->
+        <div>
+          <!-- Subtitle above the name -->
+          <div class="hero-tagline">Bench Joinery Student</div>
 
-    <!-- Home Page -->
-    <section id="home" class="page active">
-        <!-- Hero Section -->
-        <div class="hero">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1 class="hero-title">
-                        Hi, I'm <span class="highlight">Bogdan Siric</span>
-                    </h1>
-                    <p class="hero-subtitle">
-                         Developer crafting beautiful, functional digital experiences
-                    </p>
-                    <div class="hero-buttons">
-                        <button class="btn btn-primary" data-navigate="projects">
-                            View My Work
-                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="5" y1="12" x2="19" y2="12"/>
-                                <polyline points="12,5 19,12 12,19"/>
-                            </svg>
-                        </button>
-                        <button class="btn btn-secondary" data-navigate="about">
-                            Learn More About Me
-                        </button>
-                    </div>
-                    <div class="social-links">
-                        <a href="https://github.com/tvbdrkkight" class="social-link">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                            </svg>
-                        </a>
-                        <a href="https://www.linkedin.com/in/bogdan-siric-715b41334/" class="social-link">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                                <rect x="2" y="9" width="4" height="12"/>
-                                <circle cx="4" cy="4" r="2"/>
-                            </svg>
-                        </a>
-                        <a href="mailto:bogdansiric@outlook.com" class="social-link">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                <polyline points="22,6 12,13 2,6"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                <div class="scroll-indicator">
-                    <svg class="chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="6,9 12,15 18,9"/>
-                    </svg>
-                </div>
-            </div>
+          <!-- The large stacked name heading. <br> forces line breaks.
+               <em> is styled non-italic and gold via CSS. -->
+          <h1 class="hero-h1">
+            Bogdan<br>
+            <em>Siric.</em>
+          </h1>
+
+          <!-- Short introduction paragraph below the name -->
+          <p class="hero-sub">Completing a Level 2 Diploma in Bench Joinery at Building Crafts College. Precision timber work, hand tools, and technical drawings — built from the ground up.</p>
+
+          <!-- CTA buttons row. data-page triggers in-page navigation — no reload. -->
+          <div class="hero-cta-row">
+            <a href="#" data-page="work" class="btn-solid">View My Work</a>
+            <a href="#" data-page="about" class="btn-ghost">About Me</a>
+          </div>
         </div>
 
-        <!-- Skills Overview -->
-        <div class="skills-overview">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">What I Do</h2>
-                    <p class="section-subtitle">
-                        Passionate about creating exceptional digital experiences through code and design
-                    </p>
-                </div>
+        <!-- Social links anchored to the bottom of the left column -->
+        <ul class="hero-socials">
+          <!-- target="_blank" opens in a new tab -->
+          <li><a href="https://www.linkedin.com/in/bogdan-siric-715b41334/" target="_blank">LinkedIn ↗</a></li>
+          <!-- mailto: opens the user's default email app -->
+          <li><a href="mailto:bogdansiric7@gmail.com">Email ↗</a></li>
+        </ul>
 
-                <div class="skills-grid">
-                    <div class="skill-card">
-                        <div class="skill-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="16,18 22,12 16,6"/>
-                                <polyline points="8,6 2,12 8,18"/>
-                            </svg>
-                        </div>
-                        <h3 class="skill-title">Problem Solving </h3>
-                        <p class="skill-description">analyse situations, and develop effective solutions</p>
-                    </div>
-                    <div class="skill-card">
-                        <div class="skill-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                        </div>
-                        <h3 class="skill-title">computer literacy</h3>
-                        <p class="skill-description"> effectively use computers and related technology</p>
-                    </div>
-                    <div class="skill-card">
-                        <div class="skill-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <ellipse cx="12" cy="5" rx="9" ry="3"/>
-                                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
-                                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
-                            </svg>
-                        </div>
-                        <h3 class="skill-title">Health and Safety awareness</h3>
-                        <p class="skill-description">To identify and minimise risks to prevent accidents and injuries</p>
-                    </div>
-                    <div class="skill-card">
-                        <div class="skill-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                                <line x1="8" y1="21" x2="16" y2="21"/>
-                                <line x1="12" y1="17" x2="12" y2="21"/>
-                            </svg>
-                        </div>
-                        <h3 class="skill-title">Multiple coding languages</h3>
-                        <p class="skill-description">HTML/CSS JavaScript Python Visual Basics</p>
-                    </div>
-                </div>
-            </div>
+      </div><!-- end .hero-l -->
+
+      <!-- Right column: two stacked workshop photos -->
+      <div class="hero-r">
+        <!-- Each slot holds one image. CSS makes them fill the available height equally. -->
+        <div class="hero-img-slot">
+          <!-- Image file must be uploaded to the same server folder as index.html -->
+          <img src="staircase1.jpg" alt="Staircase project — Building Crafts College">
         </div>
-    </section>
-
-    <!-- About Page -->
-    <section id="about" class="page">
-        <div class="container">
-            <div class="section-header">
-                <h1 class="page-title">About Me</h1>
-                <p class="page-subtitle">
-                    Passionate developer to develop new websites and apps
-                </p>
-            </div>
-
-            <div class="about-content">
-                <div class="about-image">
-                    <div class="avatar">BS</div>
-                </div>
-                <div class="about-text">
-                    <p class="about-paragraph">
-                        I'm a passionate full-stack developer who loves creating beautiful, functional, and user-friendly applications. 
-                        With a strong background in modern web technologies, I specialize in CSS , HTML, Visual basics, Python and Node.js.
-                    </p>
-                    <p class="about-paragraph">
-                        Contact me :
-                        <p class="about-paragraph">
-                            Email -> bogdan.siric@outlook.com
-                            <p class="about-paragraph">
-                                Telephone -> 07413529217
-                            </p>
-                        </p>
-                    </p>
-                    
-
-      <div class="about-actions">
-                        <a href="cv/cv.docx" download class="cv/cv.docs" class="btn btn-primary download-cv">
-                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="7,10 12,15 17,10"/>
-                                <line x1="12" y1="15" x2="12" y2="3"/>
-                            </svg>
-                            Download CV
-                        </a>
-                    </div>
-
-
-                        <div class="social-links">
-                            <a href="https://github.com/tvbdrkkight" class="social-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                                </svg>
-                            </a>
-                            <a href="https://www.linkedin.com/in/bogdan-siric-715b41334/" class="social-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                                    <rect x="2" y="9" width="4" height="12"/>
-                                    <circle cx="4" cy="4" r="2"/>
-                                </svg>
-                            </a>
-                            <a href="mailto:bogdansiric@outlook.com" class="social-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                    <polyline points="22,6 12,13 2,6"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Skills Section -->
-            <div class="skills-section">
-                <h2 class="section-title">Skills & Expertise</h2>
-                <div class="skills-detailed">
-                    <div class="skill-item">
-                        <div class="skill-header">
-                            <svg class="skill-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="16,18 22,12 16,6"/>
-                                <polyline points="8,6 2,12 8,18"/>
-                            </svg>
-                            <h3 class="skill-name">CSS </h3>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="95"></div>
-                        </div>
-                        <p class="skill-percentage">95%</p>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-header">
-                            <svg class="skill-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                            <h3 class="skill-name">HTML</h3>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="88"></div>
-                        </div>
-                        <p class="skill-percentage">88%</p>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-header">
-                            <svg class="skill-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <ellipse cx="12" cy="5" rx="9" ry="3"/>
-                                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
-                                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
-                            </svg>
-                            <h3 class="skill-name">Python </h3>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="80"></div>
-                        </div>
-                        <p class="skill-percentage">80%</p>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-header">
-                            <svg class="skill-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                                <line x1="8" y1="21" x2="16" y2="21"/>
-                                <line x1="12" y1="17" x2="12" y2="21"/>
-                            </svg>
-                            <h3 class="skill-name">JavaScript</h3>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="60"></div>
-                        </div>
-                        <p class="skill-percentage">60%</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Personal Info -->
-            <div class="personal-info">
-                <h2 class="section-title">A Bit More About Me</h2>
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h3 class="info-title">Background</h3>
-                        <p class="info-text">
-                            I started my journey in web development at shooters hill sixth form college and have been pasionate about it ever since
-                        </p>
-                        <p class="info-text">
-                            My passion lies in solving complex problems through elegant code and creating interfaces that users love to interact with.
-                        </p>
-                    </div>
-                    <div class="info-card">
-                        <h3 class="info-title">Interests</h3>
-                        <ul class="interests-list">
-                            <li>• Open source contributions</li>
-                            <li>• Development of websites/apps</li>
-                            <li>• Learning new languages </li>
-                            <li>• Rockclimbing </li>
-                            <li>• Yoga </li>
-                            <li>• Sharing my creations online </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        <div class="hero-img-slot">
+          <img src="cabinet1.jpg" alt="Cabinet project — Building Crafts College">
         </div>
-    </section>
+      </div><!-- end .hero-r -->
 
-    <!-- Projects Page -->
-    <section id="projects" class="page">
-        <div class="container">
-            <div class="section-header">
-                <h1 class="page-title">My Projects</h1>
-                <p class="page-subtitle">
-                    A comprehensive showcase of my recent work, side projects, and technical experiments
-                </p>
-            </div>
+    </div><!-- end .hero -->
 
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="Pictures/shc.jpg" alt="E-Commerce Platform">
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Creating a validity program in Python</h3>
-                        <p class="project-description">Creating a programing that checks the validity of the students as they put the details to apply for SHC and stores all the data in a csv file</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Python</span>
-                           
-                           
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/sccreww/shc-sudent-validity-cheker" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                                </svg>
-                                Code
-                            </a>
-                        
-                            </a>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Task Management App">
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Project</h3>
-                        <p class="project-description">Collaborative project management tool with real-time updates, drag-and-drop functionality, and team collaboration features.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">TypeScript</span>
-                            <span class="tech-tag">Firebase</span>
-                            <span class="tech-tag">Tailwind</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                                </svg>
-                                Code
-                            </a>
-                            <a href="#" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                    <polyline points="15,3 21,3 21,9"/>
-                                    <line x1="10" y1="14" x2="21" y2="3"/>
-                                </svg>
-                                Live Demo
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    <!-- ── CRAFT INTRO ── -->
+    <!-- Asymmetric section: small label column left, main text right -->
+    <div class="craft-intro">
 
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Weather Dashboard">
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Project</h3>
-                        <p class="project-description">Beautiful weather application with location-based forecasts, interactive maps, and detailed weather analytics.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Vue.js</span>
-                            <span class="tech-tag">OpenWeather API</span>
-                            <span class="tech-tag">Chart.js</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                                </svg>
-                                Code
-                            </a>
-                            <a href="#" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                    <polyline points="15,3 21,3 21,9"/>
-                                    <line x1="10" y1="14" x2="21" y2="3"/>
-                                </svg>
-                                Live Demo
-                            </a>
-                        </div>
-                    </div>
-                </div>
+      <!-- Left label column with stag label at top and ghost number at bottom -->
+      <div class="ci-label">
+        <!-- Stag label — <em> is styled gold in CSS -->
+        <div class="stag"><em>—</em> The craft</div>
+        <!-- Large decorative section number — very faint, decorative only -->
+        <div class="ghost-n">01</div>
+      </div>
 
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Portfolio CMS">
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Project</h3>
-                        <p class="project-description">Content management system for creative professionals with drag-and-drop page builder and responsive templates.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Next.js</span>
-                            <span class="tech-tag">Sanity</span>
-                            <span class="tech-tag">Vercel</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                                </svg>
-                                Code
-                            </a>
-                            <a href="#" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                    <polyline points="15,3 21,3 21,9"/>
-                                    <line x1="10" y1="14" x2="21" y2="3"/>
-                                </svg>
-                                Live Demo
-                            </a>
-                        </div>
-                    </div>
-                </div>
+      <!-- Right body column — .reveal makes it animate in when scrolled into view -->
+      <div class="ci-body reveal">
+        <h2>Made by<br><em>hand.</em><br>Built to last.</h2>
+        <p>Currently completing a Level 2 Diploma in Bench Joinery at Building Crafts College. Trained in traditional joinery techniques — from interpreting technical drawings to producing timber joints to exact specification using hand and power tools.</p>
+      </div>
 
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Social Media Analytics">
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Project</h3>
-                        <p class="project-description">Comprehensive analytics dashboard for social media managers with real-time insights and automated reporting features.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">D3.js</span>
-                            <span class="tech-tag">Express</span>
-                            <span class="tech-tag">PostgreSQL</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                                </svg>
-                                Code
-                            </a>
-                            <a href="#" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                    <polyline points="15,3 21,3 21,9"/>
-                                    <line x1="10" y1="14" x2="21" y2="3"/>
-                                </svg>
-                                Live Demo
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    </div><!-- end .craft-intro -->
 
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Learning Management System">
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Project</h3>
-                        <p class="project-description">Educational platform with course creation tools, progress tracking, and interactive learning modules for online education.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Next.js</span>
-                            <span class="tech-tag">Prisma</span>
-                            <span class="tech-tag">Stripe</span>
-                            <span class="tech-tag">AWS</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                                </svg>
-                                Code
-                            </a>
-                            <a href="#" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                    <polyline points="15,3 21,3 21,9"/>
-                                    <line x1="10" y1="14" x2="21" y2="3"/>
-                                </svg>
-                                Live Demo
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Call to Action -->
-            <div class="cta-section">
-                <div class="cta-card">
-                    <h2 class="cta-title">Interested in Working Together?</h2>
-                    <p class="cta-description">
-                        I'm always open to discussing new projects and opportunities. 
-                    </p>
-                    <div class="cta-buttons">
-                       <a href="mailto:bogdansiric@outlook.com" class="btn btn-primary">
-                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                <polyline points="22,6 12,13 2,6"/>
-                            </svg>
-                            Get In Touch
-                        </a>
-                        <button class="btn btn-secondary" data-navigate="about">
-                            Learn More About Me
-                        </button>
-                    </div>
-                </div>
-            </div>
+    <!-- ── CORE SKILLS GRID ── -->
+    <!-- Four equal cards showing the main skill areas -->
+    <div class="skill-grid">
+
+      <!-- Each .skill-cell has a number, heading, and short description.
+           style="transition-delay" staggers the reveal animation so cards
+           animate in one after another rather than all at once. -->
+      <div class="skill-cell reveal">
+        <span class="s-num">01</span>
+        <h3>Timber<br>Joints</h3>
+        <!-- &amp; is the HTML entity for an ampersand & character -->
+        <p>Mortise &amp; tenon, dovetail, housing, halving — produced to specification with precision.</p>
+      </div>
+
+      <!-- transition-delay:.1s means this card animates in 0.1 seconds after the first -->
+      <div class="skill-cell reveal" style="transition-delay:.1s">
+        <span class="s-num">02</span>
+        <h3>Technical<br>Drawings</h3>
+        <p>Interpreting and working from technical drawings and measurements with accuracy.</p>
+      </div>
+
+      <div class="skill-cell reveal" style="transition-delay:.2s">
+        <span class="s-num">03</span>
+        <h3>Hand &amp;<br>Power Tools</h3>
+        <p>Safe and effective use of chisels, planes, saws, routers, and workshop machinery.</p>
+      </div>
+
+      <div class="skill-cell reveal" style="transition-delay:.3s">
+        <span class="s-num">04</span>
+        <h3>Health &amp;<br>Safety</h3>
+        <p>Strict compliance with workshop H&amp;S standards, PPE, and safe working practices.</p>
+      </div>
+
+    </div><!-- end .skill-grid -->
+
+
+    <!-- ── GALLERY PREVIEW (HOME PAGE) ── -->
+    <!-- Shows 3 teaser photos with a link to the full work page -->
+    <div class="gallery-preview">
+
+      <!-- Header row: heading on the left, "View all" link on the right -->
+      <div class="gp-header reveal">
+        <div>
+          <div class="stag"><em>—</em> Workshop work</div>
+          <h2>Recent<br><em>pieces.</em></h2>
         </div>
-    </section>
+        <!-- data-page="work" navigates to the Work section in-page -->
+        <a href="#" data-page="work">View all work ↗</a>
+      </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p class="footer-text">
-                    © 2025 Bogdan Siric. All rights reserved.
-                </p>
-                <p class="footer-subtext">
-                    Built with HTML, CSS, and JavaScript
-                </p>
-            </div>
+      <!-- Three preview image cells -->
+      <div class="gp-grid">
+
+        <!-- Each .gp-cell has an image and an overlay caption that appears on hover -->
+        <div class="gp-cell">
+          <img src="staircase1.jpg" alt="Staircase model with oiled treads">
+          <!-- .gp-overlay is hidden by default; CSS shows it on :hover -->
+          <div class="gp-overlay"><span>Staircase Model</span></div>
         </div>
-    </footer>
 
-    <script src="script.js"></script>
+        <div class="gp-cell">
+          <img src="door1.jpg" alt="3-panel pine door">
+          <div class="gp-overlay"><span>3-Panel Pine Door</span></div>
+        </div>
+
+        <div class="gp-cell">
+          <img src="cabinet1.jpg" alt="Pine cabinet with drawer">
+          <div class="gp-overlay"><span>Pine Cabinet</span></div>
+        </div>
+
+      </div><!-- end .gp-grid -->
+
+    </div><!-- end .gallery-preview -->
+
+
+  </section><!-- end #home -->
+
+
+  <!-- ══════════════════════════════════════════════════
+       WORK / GALLERY PAGE
+       Hidden by default. JavaScript adds .active when
+       the user clicks "My Work" in the nav.
+       ══════════════════════════════════════════════════ -->
+  <section id="work" class="page">
+
+    <!-- Page intro header — asymmetric layout with label left and title right -->
+    <div class="work-intro">
+      <div class="wi-label">
+        <div class="stag"><em>—</em> My work</div>
+        <!-- Decorative page number in very faint border colour -->
+        <div class="ghost-n">02</div>
+      </div>
+      <div class="wi-head reveal">
+        <h1>Workshop<br><em>pieces</em> &amp;<br>projects.</h1>
+        <p>A visual record of timber joints, workshop builds, and projects completed during my Level 2 Diploma in Bench Joinery at Building Crafts College. Each piece reflects precision, patience, and a commitment to quality.</p>
+      </div>
+    </div>
+
+
+    <!-- ── GALLERY GROUP: STAIRCASES ── -->
+    <!-- Each gallery-group wraps one category of work with its own heading -->
+    <div class="gallery-group">
+
+      <!-- Group heading row with piece count label -->
+      <div class="gallery-group-header">
+        <!-- <em> splits the word and applies gold colour to the second half -->
+        <h2>Stair<em>cases</em></h2>
+        <span class="group-count">2 pieces</span>
+      </div>
+
+      <!-- gallery-full stacks rows vertically inside this group -->
+      <div class="gallery-full">
+
+        <!-- r-big layout: first image takes 2/3 width, second takes 1/3 -->
+        <div class="gallery-row r-big reveal">
+
+          <!-- Feature image — larger on screen. style="min-height" ensures
+               the cell is always tall enough even if the image is slow to load -->
+          <div class="g-cell">
+            <img src="staircase1.jpg" alt="Staircase model with oiled treads and balustrade" style="min-height:460px;">
+            <!-- Caption slides up from below on hover via CSS transform -->
+            <div class="g-caption"><span>Staircase model — oiled treads &amp; balustrade</span></div>
+          </div>
+
+          <!-- Secondary image — narrower -->
+          <div class="g-cell">
+            <img src="staircase2.jpg" alt="Staircase frame — newel post and balusters" style="min-height:460px;">
+            <div class="g-caption"><span>Staircase frame — newel post &amp; balusters</span></div>
+          </div>
+
+        </div><!-- end .gallery-row -->
+
+      </div><!-- end .gallery-full -->
+
+    </div><!-- end .gallery-group (staircases) -->
+
+
+    <!-- ── GALLERY GROUP: CABINETS ── -->
+    <div class="gallery-group">
+
+      <div class="gallery-group-header">
+        <h2>Cabi<em>nets</em></h2>
+        <span class="group-count">2 pieces</span>
+      </div>
+
+      <div class="gallery-full">
+
+        <!-- r-2 layout: two equal-width columns side by side -->
+        <div class="gallery-row r-2 reveal">
+
+          <div class="g-cell">
+            <img src="cabinet1.jpg" alt="Pine cabinet — front view with framed door and drawer" style="min-height:380px;">
+            <div class="g-caption"><span>Pine cabinet — framed door &amp; drawer, front view</span></div>
+          </div>
+
+          <div class="g-cell">
+            <img src="cabinet2.jpg" alt="Pine cabinet — side view showing hinge detail" style="min-height:380px;">
+            <div class="g-caption"><span>Pine cabinet — hinge detail &amp; side profile</span></div>
+          </div>
+
+        </div><!-- end .gallery-row -->
+
+      </div><!-- end .gallery-full -->
+
+    </div><!-- end .gallery-group (cabinets) -->
+
+
+    <!-- ── GALLERY GROUP: DOORS ── -->
+    <div class="gallery-group">
+
+      <div class="gallery-group-header">
+        <h2>Door<em>s</em></h2>
+        <span class="group-count">2 pieces</span>
+      </div>
+
+      <div class="gallery-full">
+
+        <div class="gallery-row r-2 reveal">
+
+          <div class="g-cell">
+            <img src="door1.jpg" alt="3-panel pine door flat lay" style="min-height:400px;">
+            <div class="g-caption"><span>3-panel pine door — flat lay</span></div>
+          </div>
+
+          <!-- The lectern/reading stand is grouped with doors as it uses similar
+               raised-panel construction techniques -->
+          <div class="g-cell">
+            <img src="lectern.jpg" alt="Panelled lectern / reading stand in pine" style="min-height:400px;">
+            <div class="g-caption"><span>Panelled lectern — pine frame &amp; raised panel</span></div>
+          </div>
+
+        </div><!-- end .gallery-row -->
+
+      </div><!-- end .gallery-full -->
+
+    </div><!-- end .gallery-group (doors) -->
+
+
+    <!-- ── PROCESS SECTION ── -->
+    <!-- Explains the approach to each piece — four steps in equal columns -->
+    <div class="process-section">
+
+      <div class="proc-header reveal">
+        <div class="stag"><em>—</em> How I work</div>
+        <h2>Measure twice.<br><em>Cut once.</em></h2>
+      </div>
+
+      <!-- Four process step cells — staggered reveal delays so they animate in sequence -->
+      <div class="proc-grid">
+
+        <div class="proc-cell reveal">
+          <span class="proc-n">01</span>
+          <h3>Read the<br>Drawing</h3>
+          <p>Interpret technical drawings and measurements accurately before any material is touched.</p>
+        </div>
+
+        <div class="proc-cell reveal" style="transition-delay:.1s">
+          <span class="proc-n">02</span>
+          <h3>Mark &amp;<br>Prepare</h3>
+          <p>Mark out timber with precision using marking gauges, try squares, and mortise gauges.</p>
+        </div>
+
+        <div class="proc-cell reveal" style="transition-delay:.2s">
+          <span class="proc-n">03</span>
+          <h3>Cut &amp;<br>Shape</h3>
+          <p>Work with hand saws, chisels, planes, and power tools safely and methodically.</p>
+        </div>
+
+        <div class="proc-cell reveal" style="transition-delay:.3s">
+          <span class="proc-n">04</span>
+          <h3>Fit &amp;<br>Finish</h3>
+          <p>Test fit joints, refine with hand tools, and bring the piece to a quality finish.</p>
+        </div>
+
+      </div><!-- end .proc-grid -->
+
+    </div><!-- end .process-section -->
+
+
+  </section><!-- end #work -->
+
+
+  <!-- ══════════════════════════════════════════════════
+       ABOUT PAGE
+       Hidden by default. Shown when user clicks "About".
+       ══════════════════════════════════════════════════ -->
+  <section id="about" class="page">
+
+
+    <!-- ── ABOUT HERO ── -->
+    <div class="about-hero">
+
+      <div class="about-l">
+        <div class="hero-tag">about</div>
+        <div>
+          <div class="hero-tagline">Bench Joinery Student</div>
+          <h1 class="hero-h1">
+            Bogdan<br>
+            <em>Siric.</em>
+          </h1>
+          <p class="hero-sub">Bench Joinery student currently completing a Level 2 Diploma at Building Crafts College. Hands-on workshop experience with a strong focus on precision and quality.</p>
+        </div>
+        <ul class="hero-socials">
+          <li><a href="http://bogdansiric.online" target="_blank">bogdansiric.online ↗</a></li>
+          <li><a href="https://www.linkedin.com/in/bogdan-siric-715b41334/" target="_blank">LinkedIn ↗</a></li>
+        </ul>
+      </div>
+
+      <!-- Right column: two stacked workshop photos used as decorative imagery -->
+      <div class="about-r">
+        <div class="img-slot">
+          <img src="cabinet2.jpg" alt="Workshop — cabinet detail">
+        </div>
+        <div class="img-slot">
+          <img src="door1.jpg" alt="Workshop — door panel">
+        </div>
+      </div>
+
+    </div><!-- end .about-hero -->
+
+
+    <!-- ── STORY SECTION ── -->
+    <!-- Two columns: bold heading left, paragraphs right -->
+    <div class="about-story">
+
+      <div class="as-l reveal">
+        <div class="stag"><em>—</em> My story</div>
+        <h2>Traded the<br>keyboard<br>for <em>chisels.</em></h2>
+        <p>After completing IT studies at Shooters Hill Sixth Form, I followed a deeper calling — the satisfaction of working with my hands and building things that last.</p>
+      </div>
+
+      <!-- transition-delay:.15s means this column animates 0.15s after the left column -->
+      <div class="as-r reveal" style="transition-delay:.15s">
+        <p>I'm currently studying Bench Joinery at Building Crafts College, where I'm developing hands-on skills in producing traditional timber joints, reading technical drawings, and using hand and power tools safely and effectively.</p>
+        <p>Alongside my studies I work as a Section Chef at Zizzi, managing multiple kitchen sections during high-pressure service — a role that has sharpened my discipline, time management, and ability to maintain quality under pressure.</p>
+        <p>I also bring strong IT and programming skills from my L2 Digital Development studies, including HTML, CSS, JavaScript, Python, SQL, and Visual Basic.</p>
+      </div>
+
+    </div><!-- end .about-story -->
+
+
+    <!-- ── JOINERY SKILLS & SKILL BARS ── -->
+    <!-- Left: heading and description. Right: animated progress bars. -->
+    <div class="joinery-skills">
+      <div class="js-top">
+
+        <div class="js-head reveal">
+          <div class="stag"><em>—</em> Skills &amp; proficiency</div>
+          <h2>Workshop<br><em>skills</em> &amp;<br>IT literacy.</h2>
+          <p>A blend of practical joinery skills developed at Building Crafts College and technical IT skills from Shooters Hill Sixth Form.</p>
+        </div>
+
+        <!-- Right bars column — each .sk-item is one skill with a bar -->
+        <div class="js-bars reveal" style="transition-delay:.15s">
+
+          <!-- Each .sk-item: name + level label row, then track + animated fill bar.
+               data-w="70" is read by JavaScript to set the bar's final width in %. -->
+          <div class="sk-item">
+            <div class="sk-row">
+              <span class="sk-name">Timber Joints &amp; Fitting</span>
+              <span class="sk-pct">Developing</span>
+            </div>
+            <!-- The track is the full-width grey line; the fill bar sits inside it -->
+            <div class="sk-track"><div class="sk-fill" data-w="70"></div></div>
+          </div>
+
+          <div class="sk-item">
+            <div class="sk-row">
+              <span class="sk-name">Hand Tools</span>
+              <span class="sk-pct">Developing</span>
+            </div>
+            <div class="sk-track"><div class="sk-fill" data-w="72"></div></div>
+          </div>
+
+          <div class="sk-item">
+            <div class="sk-row">
+              <span class="sk-name">Technical Drawing Reading</span>
+              <span class="sk-pct">Competent</span>
+            </div>
+            <div class="sk-track"><div class="sk-fill" data-w="75"></div></div>
+          </div>
+
+          <!-- IT skills — expressed as percentages -->
+          <div class="sk-item">
+            <div class="sk-row">
+              <span class="sk-name">CSS / HTML</span>
+              <span class="sk-pct">95%</span>
+            </div>
+            <div class="sk-track"><div class="sk-fill" data-w="95"></div></div>
+          </div>
+
+          <div class="sk-item">
+            <div class="sk-row">
+              <span class="sk-name">Python</span>
+              <span class="sk-pct">80%</span>
+            </div>
+            <div class="sk-track"><div class="sk-fill" data-w="80"></div></div>
+          </div>
+
+          <div class="sk-item">
+            <div class="sk-row">
+              <span class="sk-name">JavaScript</span>
+              <span class="sk-pct">60%</span>
+            </div>
+            <div class="sk-track"><div class="sk-fill" data-w="60"></div></div>
+          </div>
+
+        </div><!-- end .js-bars -->
+
+      </div><!-- end .js-top -->
+    </div><!-- end .joinery-skills -->
+
+
+    <!-- ── EDUCATION ── -->
+    <!-- Timeline-style layout: fixed-width date column left, content right -->
+    <div class="edu-section">
+
+      <div class="edu-hdr reveal">
+        <div class="stag"><em>—</em> Education</div>
+        <h2>Where I'm learning the trade.</h2>
+      </div>
+
+      <!-- Entry 1: Current qualification -->
+      <div class="edu-entry reveal">
+        <!-- Date column — year range stacked vertically with <br> -->
+        <div class="edu-date">2025<br>Present</div>
+        <div class="edu-body">
+          <h3>Level 2 Diploma in Bench Joinery</h3>
+          <div class="edu-inst">Building Crafts College</div>
+          <!-- flex column wraps the bullet list items -->
+          <div style="display:flex;flex-direction:column;gap:.2rem;margin-top:.5rem;">
+            <!-- .edu-li gets a gold dash bullet automatically via CSS ::before -->
+            <p class="edu-li">Producing timber joints (mortise &amp; tenon, dovetail) to specification</p>
+            <p class="edu-li">Interpreting technical drawings and measurements accurately</p>
+            <p class="edu-li">Using hand and power tools safely and effectively</p>
+            <p class="edu-li">Maintaining precision and quality in all workshop tasks</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Entry 2: Previous qualification -->
+      <div class="edu-entry reveal" style="transition-delay:.1s">
+        <div class="edu-date">2024<br>2025</div>
+        <div class="edu-body">
+          <h3>L2 Digital Development &amp; Design Transition</h3>
+          <div class="edu-inst">Shooters Hill Sixth Form College</div>
+          <p style="font-size:.83rem;color:var(--muted);margin-bottom:.8rem;">Website development, data management, and programming.</p>
+          <!-- Tag pills list — each pill is a technology studied -->
+          <ul class="edu-tags">
+            <li class="edu-tag">HTML</li>
+            <li class="edu-tag">CSS</li>
+            <li class="edu-tag">Python</li>
+            <li class="edu-tag">SQL</li>
+            <li class="edu-tag">Visual Basic</li>
+            <li class="edu-tag">JavaScript</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Entry 3: GCSEs -->
+      <div class="edu-entry reveal" style="transition-delay:.15s">
+        <div class="edu-date">2022<br>2024</div>
+        <div class="edu-body">
+          <h3>GCSE</h3>
+          <div class="edu-inst">Haberdashers Crayford Academy</div>
+          <div style="display:flex;flex-direction:column;gap:.2rem;margin-top:.5rem;">
+            <!-- &nbsp; is a non-breaking space — keeps the dot separator on the same line -->
+            <p style="font-size:.83rem;color:var(--muted);">Business — Level 2 Merit &nbsp;·&nbsp; Maths — Grade 5 &nbsp;·&nbsp; Science — 5/5/5</p>
+            <p style="font-size:.83rem;color:var(--muted);">Computer Science — Grade 4 &nbsp;·&nbsp; English — Grade 4</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end .edu-section -->
+
+
+    <!-- ── WORK EXPERIENCE ── -->
+    <!-- Mirrors the education section layout exactly -->
+    <div class="work-section">
+
+      <div class="work-hdr reveal">
+        <div class="stag"><em>—</em> Work experience</div>
+        <h2>On the job.</h2>
+      </div>
+
+      <!-- Job 1: Current role -->
+      <div class="work-entry reveal">
+        <div class="work-date">Aug 2025<br>Present</div>
+        <div class="work-body">
+          <h3>Section Chef (3 Sections)</h3>
+          <div class="work-org">Zizzi Restaurant</div>
+          <!-- list-style:none applied via CSS — bullets are CSS ::before gold dashes -->
+          <ul>
+            <li>Manage multiple kitchen sections during high-pressure service</li>
+            <li>Maintain speed, consistency, and quality across dishes</li>
+            <li>Coordinate with team members to ensure smooth service</li>
+            <li>Follow strict hygiene and food safety standards</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Job 2: Volunteer role -->
+      <div class="work-entry reveal" style="transition-delay:.1s">
+        <div class="work-date">May 2024<br>Oct 2024</div>
+        <div class="work-body">
+          <h3>Front Desk Receptionist</h3>
+          <!-- &amp; displays the & character safely in HTML -->
+          <div class="work-org">P&amp;R V8 Motor Services · E8 2AA · Volunteer</div>
+          <ul>
+            <li>Managed bookings and daily scheduling</li>
+            <li>Handled customer enquiries and resolved issues professionally</li>
+            <li>Maintained organised records using office systems</li>
+            <li>Balanced multiple tasks simultaneously</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Job 3: Ongoing voluntary role -->
+      <div class="work-entry reveal" style="transition-delay:.15s">
+        <div class="work-date">Ongoing</div>
+        <div class="work-body">
+          <h3>Young Responder</h3>
+          <div class="work-org">St John Ambulance</div>
+          <ul>
+            <li>Trained in emergency first aid and response procedures</li>
+            <li>Responded to simulated emergencies under pressure</li>
+            <li>Promoted health and safety awareness in the community</li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- end .work-section -->
+
+
+    <!-- ── LANGUAGES ── -->
+    <!-- Three equal columns — one per language spoken -->
+    <div class="langs-section">
+
+      <div class="langs-hdr reveal">
+        <div class="stag"><em>—</em> Languages</div>
+        <h2>Three languages.<br><em>One craftsman.</em></h2>
+      </div>
+
+      <div class="langs-grid">
+
+        <!-- Each .lang-cell: index number, two-letter code, CEFR level, description -->
+        <div class="lang-cell reveal">
+          <span class="lang-idx">01</span>
+          <!-- Large two-letter code — styled very large via CSS -->
+          <div class="lang-name">EN</div>
+          <span class="lang-level">English — C2 Fluent</span>
+          <p class="lang-desc">CEFR C2 — Full professional proficiency</p>
+        </div>
+
+        <div class="lang-cell reveal" style="transition-delay:.1s">
+          <span class="lang-idx">02</span>
+          <div class="lang-name">RU</div>
+          <!-- B1 = Intermediate on the CEFR scale -->
+          <span class="lang-level">Russian — B1 (Learning)</span>
+          <p class="lang-desc">CEFR B1 — Intermediate, actively learning</p>
+        </div>
+
+        <div class="lang-cell reveal" style="transition-delay:.2s">
+          <span class="lang-idx">03</span>
+          <div class="lang-name">RO</div>
+          <span class="lang-level">Romanian — B1 (Learning)</span>
+          <p class="lang-desc">CEFR B1 — Intermediate, actively learning</p>
+        </div>
+
+      </div><!-- end .langs-grid -->
+
+    </div><!-- end .langs-section -->
+
+
+    <!-- ── CONTACT SECTION ── -->
+    <!-- Gold marquee banner, then two-column contact details / CV download block -->
+    <div class="contact-section">
+
+      <!-- Scrolling gold banner — reuses the same ticker CSS animation as the top strip -->
+      <div class="contact-marquee">
+        <div class="cm-inner">
+          <!-- Duplicated items for seamless loop — same technique as the top ticker -->
+          <span class="cm-item">Get in touch</span>
+          <span class="cm-item">Open to opportunities</span>
+          <span class="cm-item">Building Crafts College</span>
+          <span class="cm-item">Greater London</span>
+          <span class="cm-item">Get in touch</span>
+          <span class="cm-item">Open to opportunities</span>
+          <span class="cm-item">Building Crafts College</span>
+          <span class="cm-item">Greater London</span>
+        </div>
+      </div>
+
+      <!-- Two-column body: contact details left, CV download right -->
+      <div class="contact-body">
+
+        <div class="contact-l reveal">
+          <div class="stag"><em>—</em> Contact</div>
+          <h2>Let's connect.</h2>
+          <p>Open to joinery work placements, apprenticeships, and opportunities in the trade.</p>
+
+          <!-- Each .cd is a label stacked above its value -->
+          <div class="cd">
+            <span class="cd-label">Email</span>
+            <!-- mailto: opens the email client with this address pre-filled -->
+            <span class="cd-val"><a href="mailto:bogdansiric7@gmail.com">bogdansiric7@gmail.com</a></span>
+          </div>
+
+          <div class="cd">
+            <span class="cd-label">Phone</span>
+            <!-- tel: links dial the number directly on mobile devices -->
+            <span class="cd-val"><a href="tel:+447413529217">+44 7413 529 217</a></span>
+          </div>
+
+          <div class="cd">
+            <span class="cd-label">Website</span>
+            <span class="cd-val"><a href="http://bogdansiric.online" target="_blank">bogdansiric.online</a></span>
+          </div>
+
+          <div class="cd">
+            <span class="cd-label">Location</span>
+            <!-- Plain text — no link needed -->
+            <span class="cd-val">Greater London</span>
+          </div>
+        </div><!-- end .contact-l -->
+
+        <!-- Right column: CV download and interests tags -->
+        <div class="contact-r reveal" style="transition-delay:.15s">
+
+          <div class="cv-dl">
+            <div class="stag" style="margin-bottom:1rem;"><em>—</em> Download CV</div>
+            <h3>Get my full CV</h3>
+            <p>Full curriculum vitae including education, work experience, joinery skills, and references.</p>
+            <div class="cv-btns">
+              <!-- download attribute prompts the browser to save the file instead of opening it.
+                   cv.pdf must be in the same folder as index.html on your server. -->
+              <a href="cv.pdf" download class="btn-solid">Download PDF</a>
+            </div>
+          </div>
+
+          <!-- Interest tags — small bordered pill labels -->
+          <div style="margin-top:3rem;">
+            <div class="stag" style="margin-bottom:1rem;"><em>—</em> Interests</div>
+            <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+              <span style="padding:.3rem .8rem;border:1px solid var(--border);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">Bench Joinery</span>
+              <span style="padding:.3rem .8rem;border:1px solid var(--border);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">Rock Climbing</span>
+              <span style="padding:.3rem .8rem;border:1px solid var(--border);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">Art</span>
+              <span style="padding:.3rem .8rem;border:1px solid var(--border);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">Yoga</span>
+              <span style="padding:.3rem .8rem;border:1px solid var(--border);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">Music</span>
+              <span style="padding:.3rem .8rem;border:1px solid var(--border);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">Web Dev</span>
+            </div>
+          </div>
+
+        </div><!-- end .contact-r -->
+
+      </div><!-- end .contact-body -->
+
+    </div><!-- end .contact-section -->
+
+
+  </section><!-- end #about -->
+
+
+  <!-- ══════════════════════════════════════════════════
+       FOOTER
+       Shared across all pages — always visible at the bottom.
+       ══════════════════════════════════════════════════ -->
+  <footer>
+
+    <!-- Upper footer: info and CTA left, large monogram right -->
+    <div class="foot-top">
+
+      <div class="foot-l reveal">
+        <div class="stag"><em>—</em> Bogdan Siric</div>
+
+        <!-- Three key facts as label/value pairs -->
+        <div class="foot-meta">
+          <div class="fm-item">
+            <span class="fm-label">Studying</span>
+            <span class="fm-val">Building Crafts College</span>
+          </div>
+          <div class="fm-item">
+            <span class="fm-label">Location</span>
+            <span class="fm-val">Greater London</span>
+          </div>
+          <div class="fm-item">
+            <span class="fm-label">Status</span>
+            <!-- Inline style applies the accent gold colour just to this value -->
+            <span class="fm-val" style="color:var(--accent)">Open to work</span>
+          </div>
+        </div>
+
+        <!-- CTA email button at the bottom of the footer info column -->
+        <a href="mailto:bogdansiric7@gmail.com" class="btn-solid">Start a conversation</a>
+      </div><!-- end .foot-l -->
+
+      <!-- Right side: large decorative "BS" initials — hidden on mobile via CSS -->
+      <div class="foot-r">
+        <div class="foot-r-logo">BS</div>
+      </div>
+
+    </div><!-- end .foot-top -->
+
+    <!-- Lower footer bar: site name, page links, copyright notice -->
+    <div class="foot-bottom">
+      <div class="foot-logo">Bogdan Siric</div>
+
+      <!-- Footer nav — same data-page system as the main nav -->
+      <ul class="foot-nav">
+        <li><a href="#" data-page="home">Home</a></li>
+        <li><a href="#" data-page="work">My Work</a></li>
+        <li><a href="#" data-page="about">About</a></li>
+      </ul>
+
+      <!-- Copyright notice — update the year manually when needed -->
+      <span class="foot-copy">© 2025 Bogdan Siric · bogdansiric.online</span>
+    </div>
+
+  </footer>
+
+
+  <!-- ══════════════════════════════════════════════════
+       JAVASCRIPT
+       Placed at the bottom of <body> so the HTML is fully
+       loaded before scripts run — this avoids errors where
+       JS tries to find elements that don't exist yet.
+       ══════════════════════════════════════════════════ -->
+  <script>
+
+    // ── CUSTOM CURSOR ──
+
+    // Get a reference to the cursor dot element by its id
+    const cur = document.getElementById('cursor');
+
+    // Every time the mouse moves anywhere on the page, update the dot's position
+    document.addEventListener('mousemove', e => {
+      cur.style.left = e.clientX + 'px'; // e.clientX = horizontal pixel position of the mouse
+      cur.style.top  = e.clientY + 'px'; // e.clientY = vertical pixel position of the mouse
+    });
+
+    // Loop through every link and button on the page
+    document.querySelectorAll('a,button').forEach(el => {
+      // When the mouse enters a link/button, add .big to expand the cursor dot
+      el.addEventListener('mouseenter', () => cur.classList.add('big'));
+      // When the mouse leaves, remove .big to shrink it back to normal
+      el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+    });
+
+
+    // ── PAGE NAVIGATION ──
+    // Shows one page section at a time without a full browser reload
+
+    function showPage(id) {
+
+      // Step 1: hide all pages by removing .active from each
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+      // Step 2: find the page element whose id matches what was clicked and show it
+      const t = document.getElementById(id);
+      if (t) {
+        t.classList.add('active');
+        // Scroll smoothly back to the top so the user always starts from the top of the new page
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      }
+
+      // Step 3: update the .active highlight on all nav links to match the current page
+      document.querySelectorAll('[data-page]').forEach(a => {
+        // toggle adds .active if the condition is true, removes it if false
+        a.classList.toggle('active', a.dataset.page === id);
+      });
+
+      // Step 4: if the About page was just opened, trigger the skill bar animations
+      // They start at width:0 and animate to their target width using CSS transition
+      if (id === 'about') {
+        setTimeout(() => {
+          document.querySelectorAll('.sk-fill').forEach(el => {
+            // Read the target percentage from the data-w attribute set in the HTML
+            el.style.width = el.dataset.w + '%';
+          });
+        }, 350); // 350ms delay gives the page time to appear before the bars animate
+      }
+
+      // Step 5: close the mobile menu if it was open when a link was tapped
+      document.getElementById('mobileNav').classList.remove('open');
+
+      // Step 6: re-observe .reveal elements on the newly shown page
+      // Without this, elements on pages other than home wouldn't animate in
+      document.querySelectorAll('.page.active .reveal').forEach(el => obs.observe(el));
+    }
+
+    // Attach a click listener to every element that has a data-page attribute
+    // This covers nav links, footer links, and CTA buttons automatically
+    document.querySelectorAll('[data-page]').forEach(el => {
+      el.addEventListener('click', e => {
+        e.preventDefault();          // Stop the browser following the # href
+        showPage(el.dataset.page);   // Call showPage with the target page id
+      });
+    });
+
+    // Toggle the mobile dropdown menu when the hamburger icon is clicked
+    document.getElementById('hamburger').addEventListener('click', () => {
+      // If .open is present it gets removed; if absent it gets added
+      document.getElementById('mobileNav').classList.toggle('open');
+    });
+
+
+    // ── SCROLL REVEAL ──
+    // Uses the IntersectionObserver API to watch elements as they enter the viewport,
+    // then adds .visible to trigger their CSS fade-and-slide-up animation
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        // If at least 6% of the element is visible on screen, reveal it
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, {
+      threshold: 0.06 // 0.06 means trigger when 6% of the element is in the viewport
+    });
+
+    // Start watching every element with the .reveal class across the whole page
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  </script>
+
 </body>
 </html>
