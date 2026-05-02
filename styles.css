@@ -1,980 +1,717 @@
-/* Reset and Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ============================================================
+   RESET
+   Removes default browser spacing and ensures consistent
+   box model across all elements and pseudo-elements
+   ============================================================ */
+
+/* Apply border-box sizing to every element and its ::before / ::after pseudo-elements.
+   border-box means padding and border are included inside the declared width/height,
+   so a 200px box stays 200px even if you add padding. Also wipes browser default
+   margin and padding so everything starts from zero. */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+
+/* ============================================================
+   CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+   All colours and font stacks are defined once here as
+   variables, so changing a value updates the whole site.
+   ============================================================ */
+
+:root{
+  --bg:#090806;          /* Near-black warm background — the darkest surface */
+  --surface:#111009;     /* Slightly lighter than bg — used for hover/card backgrounds */
+  --border:#222018;      /* Subtle warm dark line colour for dividers */
+  --text:#ede8de;        /* Off-white warm cream — main readable text */
+  --muted:#6b6656;       /* Mid-tone warm grey — secondary/supporting text */
+  --accent:#d4a84b;      /* Warm amber gold — the main highlight/action colour, echoes wood tones */
+  --accent2:#8b5e2a;     /* Deep oak brown — darker accent, available for future use */
+  --display:'Bebas Neue',sans-serif;  /* Condensed display font for headings */
+  --body:'DM Sans',sans-serif;        /* Clean humanist sans-serif for body text */
 }
 
-html {
-    scroll-behavior: smooth;
-}
 
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    line-height: 1.6;
-    color: #1f2937;
-    overflow-x: hidden;
-}
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
 
-/* Container */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-}
+/* Enables smooth animated scrolling when jumping to anchors */
+html{scroll-behavior:smooth}
+
+/* Sets the page background colour, default text colour and font.
+   font-weight:300 gives a light feel. line-height:1.65 adds comfortable
+   reading space between lines. overflow-x:hidden prevents horizontal
+   scrollbars from appearing if any element accidentally overflows.
+   cursor:none hides the default OS cursor — replaced by the custom .cursor dot. */
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;line-height:1.65;overflow-x:hidden;cursor:none;}
+
 
-/* Navigation */
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(229, 231, 235, 0.8);
-    z-index: 1000;
-    transition: all 0.3s ease;
-}
+/* ============================================================
+   CUSTOM CURSOR
+   A small gold dot that follows the mouse, replacing the
+   default OS pointer. Grows when hovering interactive elements.
+   ============================================================ */
 
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 4rem;
-}
+/* position:fixed keeps it relative to the viewport so it never scrolls away.
+   pointer-events:none means it won't accidentally block clicks on elements beneath it.
+   z-index:9999 puts it above everything else on the page.
+   transform:translate(-50%,-50%) centres the dot on the actual mouse position
+   rather than placing its top-left corner there.
+   mix-blend-mode:difference inverts the colours beneath it, making it visible
+   on both light and dark backgrounds. */
+.cursor{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s;mix-blend-mode:difference;}
 
-.nav-logo {
-    font-weight: 700;
-    font-size: 1.25rem;
-    color: #1f2937;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
+/* When JavaScript adds the .big class (on hover over links/buttons),
+   the cursor expands from 10px to 36px — a satisfying interactive effect */
+.cursor.big{width:36px;height:36px;}
 
-.nav-logo:hover {
-    color: #2563eb;
-}
 
-.nav-menu {
-    display: flex;
-    gap: 2rem;
-}
+/* ============================================================
+   NAVIGATION BAR
+   Fixed across the top of the page at all times.
+   ============================================================ */
 
-.nav-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #6b7280;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    position: relative;
-}
+/* position:fixed keeps the nav pinned to the top while the user scrolls.
+   z-index:200 ensures it floats above page content.
+   backdrop-filter:blur adds a frosted-glass effect on the semi-transparent background.
+   The rgba background at 94% opacity lets a hint of the page show through. */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:1.3rem 2.5rem;border-bottom:1px solid var(--border);background:rgba(9,8,6,.94);backdrop-filter:blur(14px);}
 
-.nav-link:hover {
-    color: #1f2937;
-    transform: translateY(-1px);
-}
+/* Logo wrapper — flex row with a gap between the image and the text */
+.nav-logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;}
 
-.nav-link.active {
-    color: #2563eb;
-    font-weight: 600;
-}
+/* The logo image is forced to white via filter:brightness(0) invert(1) —
+   brightness(0) turns it black, then invert(1) flips it to white.
+   opacity:.9 softens it slightly so it doesn't feel harsh against the dark background. */
+.nav-logo img{height:30px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.9;}
 
-.nav-link.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 4px;
-    background: #2563eb;
-    border-radius: 50%;
-}
+/* Logo text uses the display font with wide letter spacing for a premium label feel */
+.nav-logo-text{font-family:var(--display);font-size:1.35rem;letter-spacing:.08em;color:var(--text);}
 
-.nav-icon {
-    width: 1rem;
-    height: 1rem;
-}
+/* Right side of nav — wraps the links list and the CTA button in a row */
+.nav-right{display:flex;align-items:center;gap:2.5rem;}
 
-/* Mobile Navigation */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-    gap: 4px;
-}
+/* Nav links list — flex row, removes bullet points */
+.nav-links{display:flex;gap:2rem;list-style:none;}
 
-.hamburger span {
-    width: 25px;
-    height: 3px;
-    background: #6b7280;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
+/* Individual nav link styling — small uppercase spaced-out tracking gives
+   an editorial feel. transition:color .2s animates the colour change on hover. */
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;transition:color .2s;}
 
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
+/* On hover OR when the link has .active (current page), brighten to full text colour */
+.nav-links a:hover,.nav-links a.active{color:var(--text);}
 
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
+/* The "Hire Me" CTA button in the nav — gold background, dark text, small uppercase */
+.btn-nav{padding:.55rem 1.4rem;background:var(--accent);color:var(--bg);font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:opacity .2s;}
 
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
+/* On hover, reduce opacity slightly rather than changing colour — subtle but intentional */
+.btn-nav:hover{opacity:.82;}
 
-.mobile-menu {
-    display: none;
-    background: white;
-    border-top: 1px solid #e5e7eb;
-    padding: 1rem 0;
-}
+/* Hamburger menu icon — hidden on desktop (display:none), shown on mobile via media query.
+   Three stacked spans act as the three lines of the icon. */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
 
-.mobile-nav-link {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    color: #6b7280;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
+/* Each line of the hamburger icon — thin 1px tall horizontal bar */
+.hamburger span{display:block;width:22px;height:1px;background:var(--text);transition:.3s;}
 
-.mobile-nav-link:hover,
-.mobile-nav-link.active {
-    color: #2563eb;
-    background: #eff6ff;
-}
+/* Mobile dropdown nav — hidden by default. position:fixed sits just below the 57px navbar.
+   z-index:190 keeps it below the nav bar itself but above page content. */
+.mobile-nav{display:none;position:fixed;top:57px;left:0;right:0;background:rgba(9,8,6,.97);border-bottom:1px solid var(--border);padding:1.5rem 2.5rem;flex-direction:column;gap:1.5rem;z-index:190;}
 
-/* Page System */
-.page {
-    display: none;
-    min-height: 100vh;
-    padding-top: 4rem;
-}
+/* Mobile nav link styling */
+.mobile-nav a{text-decoration:none;color:var(--muted);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;transition:color .2s;}
 
-.page.active {
-    display: block;
-    animation: fadeInUp 0.6s ease-out;
-}
+/* Mobile nav link hover — highlights in accent gold */
+.mobile-nav a:hover{color:var(--accent);}
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* When JavaScript adds .open to the mobile nav, switch display from none to flex */
+.mobile-nav.open{display:flex;}
 
-/* Hero Section */
-.hero {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-}
 
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23000" opacity="0.02"/><circle cx="75" cy="75" r="1" fill="%23000" opacity="0.02"/><circle cx="50" cy="10" r="1" fill="%23000" opacity="0.02"/><circle cx="10" cy="90" r="1" fill="%23000" opacity="0.02"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    pointer-events: none;
-}
+/* ============================================================
+   TICKER / MARQUEE STRIP
+   Scrolling text banner beneath the nav bar.
+   ============================================================ */
 
-.hero-content {
-    text-align: center;
-    max-width: 4xl;
-    margin: 0 auto;
-    padding: 0 1rem;
-    position: relative;
-    z-index: 1;
-}
+/* overflow:hidden clips the text as it scrolls out of the container edges.
+   white-space:nowrap prevents the items from wrapping onto a new line.
+   margin-top:57px pushes it down below the fixed navbar height. */
+.ticker{overflow:hidden;border-bottom:1px solid var(--border);padding:.55rem 0;white-space:nowrap;margin-top:57px;}
 
-.hero-title {
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
-    font-weight: 700;
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-    color: #1f2937;
-    animation: slideInUp 0.8s ease-out;
-}
+/* The inner track is wider than the container. animation:ticker runs the
+   translateX animation defined below — moves left continuously in a loop. */
+.ticker-inner{display:inline-flex;animation:ticker 30s linear infinite;}
 
-.highlight {
-    color: #2563eb;
-    position: relative;
-}
+/* Individual ticker item — small, spaced caps with a coloured diamond prefix in the HTML */
+.t-item{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding:0 3rem;}
 
-.highlight::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #2563eb, #3b82f6);
-    border-radius: 2px;
-    animation: expandWidth 1s ease-out 0.5s both;
-}
+/* The <span> inside each ticker item (the diamond symbol) is coloured gold */
+.t-item span{color:var(--accent);margin-right:.4rem;}
 
-@keyframes expandWidth {
-    from { width: 0; }
-    to { width: 100%; }
-}
+/* The animation moves the strip exactly 50% to the left. Since the HTML content
+   is duplicated, this creates a seamless infinite loop — when it reaches the halfway
+   point it looks identical to the start. */
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-.hero-subtitle {
-    font-size: clamp(1.125rem, 3vw, 1.5rem);
-    color: #6b7280;
-    margin-bottom: 3rem;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    animation: slideInUp 0.8s ease-out 0.2s both;
-}
 
-.hero-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 3rem;
-    animation: slideInUp 0.8s ease-out 0.4s both;
-}
+/* ============================================================
+   PAGE SYSTEM
+   Only one .page is shown at a time. JavaScript swaps .active.
+   ============================================================ */
 
-.social-links {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    animation: slideInUp 0.8s ease-out 0.6s both;
-}
+/* All pages are hidden by default */
+.page{display:none;}
 
-.social-link {
-    color: #9ca3af;
-    transition: all 0.3s ease;
-    padding: 0.5rem;
-    border-radius: 50%;
-}
+/* The currently active page is shown as a block */
+.page.active{display:block;}
 
-.social-link:hover {
-    color: #2563eb;
-    transform: translateY(-2px) scale(1.1);
-    background: rgba(37, 99, 235, 0.1);
-}
 
-.social-link svg {
-    width: 1.5rem;
-    height: 1.5rem;
-}
+/* ============================================================
+   STAG (SECTION LABEL)
+   Small decorative label above section headings — e.g. "— The craft"
+   ============================================================ */
 
-.scroll-indicator {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: bounce 2s infinite;
-}
+/* Tiny all-caps text with very wide letter spacing — used as a category label */
+.stag{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
 
-.chevron-down {
-    width: 1.5rem;
-    height: 1.5rem;
-    color: #9ca3af;
-}
+/* The <em> inside .stag (usually the dash "—") is coloured accent gold.
+   font-style:normal overrides the browser's default italic on <em> tags. */
+.stag em{font-style:normal;color:var(--accent);}
 
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateX(-50%) translateY(0);
-    }
-    40% {
-        transform: translateX(-50%) translateY(-10px);
-    }
-    60% {
-        transform: translateX(-50%) translateY(-5px);
-    }
-}
 
-@keyframes slideInUp {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* ============================================================
+   BUTTONS
+   Two variants: solid (filled gold) and ghost (outlined).
+   ============================================================ */
 
-/* Buttons */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
+/* Solid button — gold background with dark text. display:inline-block allows
+   padding to work correctly on an <a> tag. */
+.btn-solid{display:inline-block;padding:.85rem 2rem;background:var(--accent);color:var(--bg);font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;border:1px solid var(--accent);transition:opacity .2s;}
 
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
-}
+/* On hover, dims slightly rather than doing a colour swap — more refined feel */
+.btn-solid:hover{opacity:.82;}
 
-.btn:hover::before {
-    left: 100%;
-}
+/* Ghost button — transparent background with a subtle border.
+   On hover the border and text both shift to accent gold. */
+.btn-ghost{display:inline-block;padding:.85rem 2rem;background:transparent;color:var(--text);font-size:.72rem;font-weight:400;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;border:1px solid var(--border);transition:border-color .2s,color .2s;}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
 
-.btn-primary {
-    background: #2563eb;
-    color: white;
-}
 
-.btn-primary:hover {
-    background: #1d4ed8;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
-}
+/* ============================================================
+   SCROLL REVEAL ANIMATION
+   Elements start invisible and slightly shifted down.
+   When the IntersectionObserver adds .visible they animate in.
+   ============================================================ */
 
-.btn-secondary {
-    background: transparent;
-    color: #2563eb;
-    border: 2px solid #2563eb;
-}
+/* Initial state: transparent and nudged 26px downward */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .85s ease,transform .85s ease;}
 
-.btn-secondary:hover {
-    background: #2563eb;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
-}
+/* Final state once .visible is added by JS: fully opaque, back in natural position */
+.reveal.visible{opacity:1;transform:translateY(0);}
 
-.btn-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    transition: transform 0.3s ease;
-}
 
-.btn:hover .btn-icon {
-    transform: translateX(2px);
-}
+/* ============================================================
+   HOME PAGE
+   ============================================================ */
 
-/* Skills Overview */
-.skills-overview {
-    padding: 5rem 0;
-    background: white;
-}
 
-.section-header {
-    text-align: center;
-    margin-bottom: 4rem;
-}
+/* ── HERO SECTION ── */
 
-.section-title {
-    font-size: clamp(2rem, 5vw, 2.5rem);
-    font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 1rem;
-}
+/* Two-column grid — left content, right images. min-height keeps it tall
+   enough to feel like a full opening statement. */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:91vh;border-bottom:1px solid var(--border);}
 
-.section-subtitle {
-    font-size: 1.25rem;
-    color: #6b7280;
-    max-width: 600px;
-    margin: 0 auto;
-}
+/* Left column — flex column with space-between so content sits at top
+   and the social links anchor to the bottom */
+.hero-l{padding:5rem 3rem 4rem 2.5rem;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--border);}
 
-.page-title {
-    font-size: clamp(2.5rem, 6vw, 3rem);
-    font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 1rem;
-}
+/* Small location/category label at the very top of the hero */
+.hero-tag{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
 
-.page-subtitle {
-    font-size: 1.25rem;
-    color: #6b7280;
-    max-width: 700px;
-    margin: 0 auto;
-}
+/* Subheading above the main H1 — small but spaced out for legibility */
+.hero-tagline{font-family:var(--display);font-size:clamp(.9rem,1.2vw,1.1rem);letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:1rem;}
 
-.skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
+/* Main hero heading — clamp() scales font size fluidly between 3rem (small screens)
+   and 7rem (large screens). line-height:.91 tightens the lines for a bold stacked look. */
+.hero-h1{font-family:var(--display);font-size:clamp(3rem,6.5vw,7rem);line-height:.91;letter-spacing:.01em;text-transform:uppercase;}
 
-.skill-card {
-    text-align: center;
-    padding: 2rem;
-    border-radius: 1rem;
-    transition: all 0.3s ease;
-    background: white;
-    border: 1px solid #f3f4f6;
-}
+/* The <em> inside the heading overrides italic and applies accent gold colour */
+.hero-h1 em{font-style:normal;color:var(--accent);}
 
-.skill-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
+/* Short supporting paragraph beneath the H1 — max-width in ch units (character widths)
+   limits line length for comfortable reading */
+.hero-sub{margin-top:1.8rem;font-size:.9rem;color:var(--muted);max-width:38ch;line-height:1.85;}
 
-.skill-icon {
-    width: 4rem;
-    height: 4rem;
-    background: #eff6ff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-    transition: all 0.3s ease;
-}
+/* CTA button row — flex with gap, wraps on very narrow screens */
+.hero-cta-row{display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;}
 
-.skill-card:hover .skill-icon {
-    background: #2563eb;
-    transform: scale(1.1);
-}
+/* Social links list at the bottom of the hero left column */
+.hero-socials{display:flex;gap:1.5rem;list-style:none;}
+.hero-socials a{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.hero-socials a:hover{color:var(--accent);}
 
-.skill-icon svg {
-    width: 2rem;
-    height: 2rem;
-    color: #2563eb;
-    transition: color 0.3s ease;
-}
+/* Right column of the hero — a grid with two equal rows for two stacked images */
+.hero-r{display:grid;grid-template-rows:1fr 1fr;}
 
-.skill-card:hover .skill-icon svg {
-    color: white;
-}
+/* Each image slot clips any overflow so images don't burst out of their box */
+.hero-img-slot{overflow:hidden;border-bottom:1px solid var(--border);position:relative;}
 
-.skill-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 0.5rem;
-}
+/* Remove the bottom border from the very last image slot to avoid a double-border
+   with the section below */
+.hero-img-slot:last-child{border-bottom:none;}
 
-.skill-description {
-    color: #6b7280;
-    font-size: 0.875rem;
-}
+/* Images fill their slot fully. object-fit:cover crops rather than squishes.
+   min-height ensures they're always tall enough to look good. */
+.hero-img-slot img{width:100%;height:100%;object-fit:cover;min-height:220px;}
 
-/* About Page */
-#about {
-    background: white;
-    padding: 2rem 0 5rem;
-}
 
-.about-content {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 3rem;
-    align-items: center;
-    margin-bottom: 4rem;
-}
+/* ── CRAFT INTRO SECTION ── */
 
-.about-image {
-    display: flex;
-    justify-content: center;
-}
+/* Asymmetric two-column layout — narrow label column on the left, wider body on the right */
+.craft-intro{display:grid;grid-template-columns:1fr 2fr;border-bottom:1px solid var(--border);}
 
-.avatar {
-    width: 20rem;
-    height: 20rem;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    border-radius: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4rem;
-    font-weight: 700;
-    color: white;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
-}
+/* Label column — flex column with space-between pushes stag label to top and ghost number to bottom */
+.ci-label{padding:4rem 2.5rem;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:space-between;}
 
-.avatar:hover {
-    transform: scale(1.05) rotate(2deg);
-}
+/* Large decorative section number rendered in the border colour so it's subtle, not distracting.
+   user-select:none prevents it from being accidentally highlighted when selecting text. */
+.ci-label .ghost-n{font-family:var(--display);font-size:7rem;line-height:1;color:var(--border);user-select:none;}
 
-.about-paragraph {
-    font-size: 1.125rem;
-    color: #6b7280;
-    margin-bottom: 1.5rem;
-    line-height: 1.7;
-}
+/* Body column padding */
+.ci-body{padding:4rem 2.5rem 4rem 3rem;}
 
-.about-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    margin-top: 2rem;
-}
+/* Section heading — fluid size with tight line height for stacked typographic look */
+.ci-body h2{font-family:var(--display);font-size:clamp(2rem,3.8vw,4rem);text-transform:uppercase;line-height:.93;margin-bottom:1.5rem;}
+.ci-body h2 em{font-style:normal;color:var(--accent);}
 
-.download-cv {
-    align-self: flex-start;
-}
+/* Supporting paragraph — max-width in ch keeps it readable without spanning too wide */
+.ci-body p{font-size:.88rem;color:var(--muted);max-width:52ch;line-height:1.9;}
 
-/* Skills Section */
-.skills-section {
-    margin-bottom: 4rem;
-}
 
-.skills-detailed {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
+/* ── SKILLS GRID ── */
 
-.skill-item {
-    background: #f9fafb;
-    padding: 1.5rem;
-    border-radius: 1rem;
-    transition: all 0.3s ease;
-}
+/* Four equal columns for the four skill cards */
+.skill-grid{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border);}
 
-.skill-item:hover {
-    background: white;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
+/* Each card — padding all around, right border divides cards visually.
+   transition:background animates the hover state smoothly. */
+.skill-cell{padding:3rem 2rem;border-right:1px solid var(--border);transition:background .3s;}
 
-.skill-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
+/* Remove the right border from the final card to avoid a double-border with any container */
+.skill-cell:last-child{border-right:none;}
 
-.skill-icon-small {
-    width: 1.5rem;
-    height: 1.5rem;
-    color: #2563eb;
-}
+/* On hover, the cell background lifts slightly to the surface colour */
+.skill-cell:hover{background:var(--surface);}
 
-.skill-name {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #1f2937;
-}
+/* The "01", "02" numbering label above each skill card heading */
+.s-num{font-family:var(--display);font-size:.78rem;letter-spacing:.1em;color:var(--accent);display:block;margin-bottom:1.4rem;}
 
-.skill-bar {
-    width: 100%;
-    height: 0.5rem;
-    background: #e5e7eb;
-    border-radius: 0.25rem;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-}
+/* Skill heading — display font, uppercase, tightly spaced */
+.skill-cell h3{font-family:var(--display);font-size:1.4rem;letter-spacing:.03em;text-transform:uppercase;margin-bottom:.8rem;line-height:1.1;}
 
-.skill-progress {
-    height: 100%;
-    background: linear-gradient(90deg, #2563eb, #3b82f6);
-    border-radius: 0.25rem;
-    width: 0;
-    transition: width 1.5s ease-in-out;
-}
+/* Skill description text */
+.skill-cell p{font-size:.8rem;color:var(--muted);line-height:1.8;}
 
-.skill-percentage {
-    font-size: 0.875rem;
-    color: #6b7280;
-}
 
-/* Personal Info */
-.personal-info {
-    background: linear-gradient(135deg, #eff6ff, #dbeafe);
-    padding: 3rem;
-    border-radius: 1.5rem;
-}
+/* ── GALLERY PREVIEW (HOME) ── */
 
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
+/* Wrapper for the three-cell preview grid on the home page */
+.gallery-preview{border-bottom:1px solid var(--border);}
 
-.info-card {
-    background: rgba(255, 255, 255, 0.8);
-    padding: 2rem;
-    border-radius: 1rem;
-    backdrop-filter: blur(10px);
-}
+/* Header row — space-between pushes the heading left and "View all" link right */
+.gp-header{padding:4rem 2.5rem 3rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end;}
+.gp-header h2{font-family:var(--display);font-size:clamp(2rem,3.5vw,3.5rem);text-transform:uppercase;line-height:.93;margin-top:.8rem;}
+.gp-header h2 em{font-style:normal;color:var(--accent);}
 
-.info-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 1rem;
-}
+/* "View all work" link — underlined with the border colour, upgrades to gold on hover */
+.gp-header a{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:.15rem;transition:color .2s;}
+.gp-header a:hover{color:var(--accent);}
 
-.info-text {
-    color: #6b7280;
-    line-height: 1.7;
-    margin-bottom: 1rem;
-}
+/* Three equal preview cells */
+.gp-grid{display:grid;grid-template-columns:repeat(3,1fr);}
 
-.interests-list {
-    list-style: none;
-    color: #6b7280;
-    line-height: 1.8;
-}
+/* Each preview cell — aspect-ratio:4/3 enforces a consistent landscape shape.
+   overflow:hidden ensures the zoom animation doesn't spill out. position:relative
+   is needed for the absolutely-positioned overlay caption. */
+.gp-cell{border-right:1px solid var(--border);overflow:hidden;position:relative;aspect-ratio:4/3;}
+.gp-cell:last-child{border-right:none;}
 
-.interests-list li {
-    padding: 0.25rem 0;
-    transition: color 0.3s ease;
-}
+/* Image fills the cell, zooms in on hover via scale transform */
+.gp-cell img{width:100%;height:100%;object-fit:cover;transition:transform .6s;}
+.gp-cell:hover img{transform:scale(1.05);}
 
-.interests-list li:hover {
-    color: #2563eb;
-}
+/* Caption overlay — sits at the bottom of the cell but starts fully hidden (opacity:0).
+   background gradient fades from transparent at top to dark at bottom. */
+.gp-overlay{position:absolute;bottom:0;left:0;right:0;padding:1.2rem 1.5rem;background:linear-gradient(transparent,rgba(9,8,6,.85));opacity:0;transition:opacity .3s;}
 
-/* Projects Page */
-#projects {
-    background: #f9fafb;
-    padding: 2rem 0 5rem;
-}
+/* On hover, the overlay fades in to reveal the caption text */
+.gp-cell:hover .gp-overlay{opacity:1;}
+.gp-overlay span{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text);}
 
-.projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
 
-.project-card {
-    background: white;
-    border-radius: 1.5rem;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    position: relative;
-}
+/* ============================================================
+   ABOUT PAGE
+   ============================================================ */
 
-.project-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-}
+/* Hero section mirrors the home hero layout — two equal columns */
+.about-hero{display:grid;grid-template-columns:1fr 1fr;min-height:80vh;border-bottom:1px solid var(--border);}
+.about-l{padding:5rem 3rem 4rem 2.5rem;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--border);}
 
-.project-image {
-    aspect-ratio: 16/9;
-    overflow: hidden;
-    position: relative;
-}
+/* Right column stacks two image slots vertically using flex column */
+.about-r{display:flex;flex-direction:column;}
 
-.project-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
+/* Each image slot takes equal space (flex:1) and hides overflow from object-fit:cover */
+.about-r .img-slot{flex:1;overflow:hidden;border-bottom:1px solid var(--border);}
+.about-r .img-slot:last-child{border-bottom:none;}
+.about-r img{width:100%;height:100%;object-fit:cover;min-height:200px;}
 
-.project-card:hover .project-image img {
-    transform: scale(1.05);
-}
 
-.project-content {
-    padding: 1.5rem;
-}
+/* ── STORY SECTION ── */
 
-.project-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 0.75rem;
-}
+/* Two equal columns — heading left, paragraphs right */
+.about-story{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
+.as-l{padding:5rem 3rem 5rem 2.5rem;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:2rem;}
+.as-l h2{font-family:var(--display);font-size:clamp(2rem,3.8vw,3.8rem);text-transform:uppercase;line-height:.93;}
+.as-l h2 em{font-style:normal;color:var(--accent);}
+.as-l p{font-size:.87rem;color:var(--muted);max-width:44ch;line-height:1.9;}
 
-.project-description {
-    color: #6b7280;
-    font-size: 0.875rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-}
+/* Right column — text paragraphs centred vertically within the column */
+.as-r{padding:5rem 2.5rem 5rem 3rem;display:flex;flex-direction:column;gap:1.8rem;justify-content:center;}
+.as-r p{font-size:.87rem;color:var(--muted);line-height:1.9;}
 
-.project-tech {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-}
 
-.tech-tag {
-    background: #eff6ff;
-    color: #1e40af;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
+/* ── JOINERY SKILLS / SKILL BARS ── */
 
-.tech-tag:hover {
-    background: #2563eb;
-    color: white;
-    transform: scale(1.05);
-}
+.joinery-skills{border-bottom:1px solid var(--border);}
 
-.project-links {
-    display: flex;
-    gap: 1rem;
-}
+/* Two-column layout — heading/description left, animated bars right */
+.js-top{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
+.js-head{padding:5rem 3rem 5rem 2.5rem;border-right:1px solid var(--border);}
+.js-head h2{font-family:var(--display);font-size:clamp(2rem,3.5vw,3.5rem);text-transform:uppercase;line-height:.93;margin-top:1.5rem;margin-bottom:1.5rem;}
+.js-head h2 em{font-style:normal;color:var(--accent);}
+.js-head p{font-size:.87rem;color:var(--muted);max-width:36ch;line-height:1.85;}
 
-.project-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #6b7280;
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
+/* Right column containing all the skill bars */
+.js-bars{padding:5rem 2.5rem 5rem 3rem;display:flex;flex-direction:column;gap:2rem;}
 
-.project-link:hover {
-    color: #2563eb;
-    transform: translateX(2px);
-}
+/* Wrapper for each individual skill — name label, percentage, and the bar itself */
+.sk-item{}
 
-.project-link svg {
-    width: 1rem;
-    height: 1rem;
-}
+/* Row above each bar — name on the left, percentage label on the right */
+.sk-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.6rem;}
 
-/* Call to Action */
-.cta-section {
-    margin-top: 4rem;
-    text-align: center;
-}
+/* Skill name text in display font */
+.sk-name{font-family:var(--display);font-size:1.1rem;letter-spacing:.05em;text-transform:uppercase;}
 
-.cta-card {
-    background: white;
-    padding: 3rem;
-    border-radius: 1.5rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 0 auto;
-}
+/* Percentage / proficiency label in accent gold */
+.sk-pct{font-size:.7rem;letter-spacing:.1em;color:var(--accent);}
 
-.cta-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 1rem;
-}
+/* The track is a thin 1px line in border colour — the fill bar animates on top of it */
+.sk-track{height:1px;background:var(--border);position:relative;}
 
-.cta-description {
-    color: #6b7280;
-    margin-bottom: 2rem;
-    line-height: 1.6;
-}
+/* The fill bar starts at width:0 and animates to its data-w value when JS triggers it.
+   transition:width 1.2s eases the bar growing from left to right. */
+.sk-fill{height:1px;background:var(--accent);width:0;transition:width 1.2s ease;}
 
-.cta-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    justify-content: center;
-}
 
-/* Footer */
-.footer {
-    background: #1f2937;
-    color: white;
-    padding: 3rem 0;
-}
+/* ── EDUCATION ── */
 
-.footer-content {
-    text-align: center;
-}
+/* Section wrapper with side padding to align with the rest of the page */
+.edu-section{border-bottom:1px solid var(--border);padding:0 2.5rem;}
 
-.footer-text {
-    color: #9ca3af;
-    margin-bottom: 0.5rem;
-}
+/* Section header — the "Education" heading row */
+.edu-hdr{padding:4rem 0 2rem;border-bottom:1px solid var(--border);}
+.edu-hdr h2{font-family:var(--display);font-size:clamp(1.8rem,3vw,2.8rem);text-transform:uppercase;margin-top:.8rem;}
 
-.footer-subtext {
-    color: #6b7280;
-    font-size: 0.875rem;
-}
+/* Each education entry is a two-column row — fixed 200px date column, flexible body */
+.edu-entry{display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid var(--border);}
+.edu-entry:last-child{border-bottom:none;}
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .nav-menu {
-        display: none;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    .mobile-menu.active {
-        display: block;
-        animation: slideDown 0.3s ease-out;
-    }
-    
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .hero-buttons {
-        align-items: center;
-    }
-    
-    .about-content {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 2rem;
-    }
-    
-    .avatar {
-        width: 15rem;
-        height: 15rem;
-        font-size: 3rem;
-    }
-    
-    .skills-detailed {
-        grid-template-columns: 1fr;
-    }
-    
-    .projects-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .personal-info {
-        padding: 2rem;
-    }
-    
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .cta-card {
-        padding: 2rem;
-    }
-    
-    .cta-buttons {
-        align-items: center;
-    }
-}
+/* Date column — right border separates it from the body, small uppercase text */
+.edu-date{border-right:1px solid var(--border);padding:2.5rem 2rem;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);line-height:1.8;}
 
-@media (min-width: 640px) {
-    .hero-buttons {
-        flex-direction: row;
-        justify-content: center;
-    }
-    
-    .cta-buttons {
-        flex-direction: row;
-    }
-}
+/* Body column — title, institution, and bullet points */
+.edu-body{padding:2.5rem 2rem 2.5rem 3rem;}
+.edu-body h3{font-family:var(--display);font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.3rem;}
 
-/* Animation Classes */
-.animate-on-scroll {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.6s ease-out;
-}
+/* Institution name displayed in accent gold below the qualification title */
+.edu-inst{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
+.edu-body p,.edu-li{font-size:.83rem;color:var(--muted);line-height:1.8;}
 
-.animate-on-scroll.animated {
-    opacity: 1;
-    transform: translateY(0);
-}
+/* CSS-generated bullet using a gold dash before each list item */
+.edu-li::before{content:'—  ';color:var(--accent);}
 
-/* Loading Animation */
-.loading {
-    opacity: 0;
-    animation: fadeIn 0.5s ease-out forwards;
-}
+/* Tag pills for skills like HTML, CSS, Python */
+.edu-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem;list-style:none;}
 
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
-}
+/* Each individual tag — bordered pill in muted text */
+.edu-tag{padding:.2rem .7rem;border:1px solid var(--border);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
 
-/* Smooth Transitions */
-* {
-    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
 
-/* Focus States */
-.btn:focus,
-.nav-link:focus,
-.social-link:focus,
-.project-link:focus {
-    outline: 2px solid #2563eb;
-    outline-offset: 2px;
-}
+/* ── WORK EXPERIENCE ── */
 
-/* Hover Effects */
-.project-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(59, 130, 246, 0.1));
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
+/* Mirrors the education section layout exactly */
+.work-section{border-bottom:1px solid var(--border);padding:0 2.5rem;}
+.work-hdr{padding:4rem 0 2rem;border-bottom:1px solid var(--border);}
+.work-hdr h2{font-family:var(--display);font-size:clamp(1.8rem,3vw,2.8rem);text-transform:uppercase;margin-top:.8rem;}
+.work-entry{display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid var(--border);}
+.work-entry:last-child{border-bottom:none;}
+.work-date{border-right:1px solid var(--border);padding:2.5rem 2rem;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);line-height:1.8;}
+.work-body{padding:2.5rem 2rem 2.5rem 3rem;}
+.work-body h3{font-family:var(--display);font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.3rem;}
+.work-org{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
 
-.project-card:hover::before {
-    opacity: 1;
-}
+/* Removes default bullet points — replaced by CSS ::before gold dashes */
+.work-body ul{list-style:none;}
+.work-body li{font-size:.83rem;color:var(--muted);line-height:1.8;padding:.15rem 0;}
+.work-body li::before{content:'—  ';color:var(--accent);}
+
+
+/* ── LANGUAGES ── */
+
+.langs-section{border-bottom:1px solid var(--border);}
+.langs-hdr{padding:4rem 2.5rem 3rem;border-bottom:1px solid var(--border);}
+.langs-hdr h2{font-family:var(--display);font-size:clamp(2rem,3.5vw,3.5rem);text-transform:uppercase;line-height:.93;margin-top:.8rem;}
+.langs-hdr h2 em{font-style:normal;color:var(--accent);}
+
+/* Three equal columns — one per language */
+.langs-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.lang-cell{padding:3rem 2.5rem;border-right:1px solid var(--border);}
+.lang-cell:last-child{border-right:none;}
+
+/* Small index number above each language code */
+.lang-idx{font-size:.6rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:.8rem;}
+
+/* Large two-letter language code — e.g. EN, RU, RO. Fluid size scales with viewport. */
+.lang-name{font-family:var(--display);font-size:clamp(2.5rem,5vw,5rem);line-height:.88;color:var(--text);}
+
+/* CEFR level shown in accent gold below the code */
+.lang-level{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-top:.8rem;display:block;}
+
+/* Short description of proficiency level */
+.lang-desc{font-size:.78rem;color:var(--muted);margin-top:.5rem;line-height:1.6;}
+
+
+/* ── CONTACT SECTION ── */
+
+.contact-section{border-bottom:1px solid var(--border);}
+
+/* Gold marquee banner above the contact body — accent background with dark text */
+.contact-marquee{overflow:hidden;border-bottom:1px solid var(--border);background:var(--accent);padding:1.8rem 0;white-space:nowrap;}
+
+/* Reuses the same ticker animation as the top strip — 18s is faster for more energy */
+.cm-inner{display:inline-flex;animation:ticker 18s linear infinite;}
+.cm-item{font-family:var(--display);font-size:1.25rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);padding:0 2rem;}
+
+/* CSS-generated dot separator between marquee items */
+.cm-item::after{content:'·';margin-left:2rem;}
+
+/* Two-column contact body — details left, CV download right */
+.contact-body{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
+.contact-l{padding:5rem 3rem 5rem 2.5rem;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:1.8rem;}
+.contact-l h2{font-family:var(--display);font-size:clamp(2rem,3.2vw,3.2rem);text-transform:uppercase;line-height:.94;}
+.contact-l p{font-size:.87rem;color:var(--muted);max-width:40ch;line-height:1.85;}
+
+/* Each contact detail (email, phone etc) — label stacked above value */
+.cd{display:flex;flex-direction:column;gap:.3rem;}
+.cd-label{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+.cd-val{font-size:.9rem;color:var(--text);}
+
+/* Contact detail links inherit text colour and gain gold on hover */
+.cd-val a{color:var(--text);text-decoration:none;transition:color .2s;}
+.cd-val a:hover{color:var(--accent);}
+
+/* Right column — CV download block and interests tags */
+.contact-r{padding:5rem 2.5rem 5rem 3rem;display:flex;flex-direction:column;gap:2rem;justify-content:center;}
+.cv-dl h3{font-family:var(--display);font-size:1.4rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.8rem;}
+.cv-dl p{font-size:.83rem;color:var(--muted);line-height:1.8;margin-bottom:1.2rem;}
+
+/* Button row inside the CV download block — flex lets them sit side by side */
+.cv-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+
+
+/* ============================================================
+   WORK / GALLERY PAGE
+   ============================================================ */
+
+/* Page intro — asymmetric grid: narrow label left, wide heading right */
+.work-intro{display:grid;grid-template-columns:1fr 2fr;border-bottom:1px solid var(--border);}
+.wi-label{padding:4rem 2.5rem;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:space-between;}
+
+/* Ghost number — large decorative "02" in border colour */
+.wi-label .ghost-n{font-family:var(--display);font-size:7rem;line-height:1;color:var(--border);user-select:none;}
+.wi-head{padding:4rem 2.5rem 4rem 3rem;}
+.wi-head h1{font-family:var(--display);font-size:clamp(2.5rem,5vw,5.5rem);text-transform:uppercase;line-height:.93;margin-top:.8rem;}
+.wi-head h1 em{font-style:normal;color:var(--accent);}
+.wi-head p{font-size:.87rem;color:var(--muted);max-width:48ch;line-height:1.9;margin-top:1.5rem;}
+
+
+/* ── GALLERY GROUPS ── */
+
+/* Each group (Staircases, Cabinets, Doors) is wrapped in this container */
+.gallery-group{border-bottom:1px solid var(--border);}
+
+/* Group header row — title and piece count sit side by side, aligned to baseline */
+.gallery-group-header{padding:3rem 2.5rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:2rem;}
+.gallery-group-header h2{font-family:var(--display);font-size:clamp(1.5rem,2.8vw,2.8rem);text-transform:uppercase;line-height:.93;}
+.gallery-group-header h2 em{font-style:normal;color:var(--accent);}
+
+/* "2 pieces" count label to the right of the group heading */
+.gallery-group-header .group-count{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+
+
+/* ── GALLERY GRID ROWS ── */
+
+/* Container that stacks gallery rows vertically */
+.gallery-full{display:flex;flex-direction:column;}
+
+/* Each row is a CSS grid — modifier classes below set how many columns */
+.gallery-row{display:grid;border-bottom:1px solid var(--border);}
+
+/* Two equal columns */
+.gallery-row.r-2{grid-template-columns:1fr 1fr;}
+
+/* Three equal columns */
+.gallery-row.r-3{grid-template-columns:1fr 1fr 1fr;}
+
+/* "Big" layout — first cell is twice as wide as the second, for a feature image */
+.gallery-row.r-big{grid-template-columns:2fr 1fr;}
+
+/* Remove bottom border from the last row inside a gallery group to avoid double borders */
+.gallery-row:last-child{border-bottom:none;}
+
+/* Individual image cell — overflow:hidden clips the zoom animation neatly.
+   position:relative is needed for the absolute caption overlay. */
+.g-cell{border-right:1px solid var(--border);overflow:hidden;position:relative;}
+.g-cell:last-child{border-right:none;}
+
+/* Image fills the cell. display:block removes the small gap below inline images.
+   transition:transform enables the smooth zoom on hover. */
+.g-cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s;}
+
+/* Hovering a cell zooms the image in by 4% — subtle but tactile */
+.g-cell:hover img{transform:scale(1.04);}
+
+/* Caption bar — pinned to the bottom of the cell but starts off-screen below (translateY 100%).
+   The gradient fades from transparent to near-black so text is readable over any image. */
+.g-caption{position:absolute;bottom:0;left:0;right:0;padding:1.5rem;background:linear-gradient(transparent,rgba(9,8,6,.9));transform:translateY(100%);transition:transform .35s;}
+
+/* On hover, the caption slides up into view */
+.g-cell:hover .g-caption{transform:translateY(0);}
+.g-caption span{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text);}
+
+
+/* ── PROCESS SECTION ── */
+
+.process-section{border-bottom:1px solid var(--border);}
+
+/* Header — large heading with stag label above */
+.proc-header{padding:5rem 2.5rem 4rem;border-bottom:1px solid var(--border);}
+.proc-header h2{font-family:var(--display);font-size:clamp(2rem,4vw,4rem);text-transform:uppercase;line-height:.93;margin-top:.8rem;}
+.proc-header h2 em{font-style:normal;color:var(--accent);}
+
+/* Four equal columns — one per process step */
+.proc-grid{display:grid;grid-template-columns:repeat(4,1fr);}
+.proc-cell{padding:3.5rem 2rem;border-right:1px solid var(--border);}
+.proc-cell:last-child{border-right:none;}
+
+/* Step number in accent gold */
+.proc-n{font-family:var(--display);font-size:.78rem;letter-spacing:.1em;color:var(--accent);display:block;margin-bottom:1.4rem;}
+.proc-cell h3{font-family:var(--display);font-size:1.4rem;letter-spacing:.03em;text-transform:uppercase;margin-bottom:.8rem;line-height:1.1;}
+.proc-cell p{font-size:.8rem;color:var(--muted);line-height:1.8;}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+/* Top border separates the footer from the last page section */
+footer{border-top:1px solid var(--border);}
+
+/* Upper footer — two columns: info/CTA left, large monogram right */
+.foot-top{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
+.foot-l{padding:5rem 3rem 5rem 2.5rem;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:2.5rem;}
+
+/* Meta details block — "Studying / Location / Status" labels and values */
+.foot-meta{display:flex;flex-direction:column;gap:1rem;}
+.fm-item{display:flex;gap:2rem;align-items:baseline;}
+
+/* Fixed min-width on labels keeps the values left-aligned across all rows */
+.fm-label{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);min-width:80px;}
+.fm-val{font-size:.85rem;color:var(--text);}
+
+/* Right cell of upper footer — centres the large "BS" monogram */
+.foot-r{display:flex;align-items:center;justify-content:center;}
+
+/* Huge decorative monogram in border colour — purely decorative, not selectable */
+.foot-r-logo{font-family:var(--display);font-size:8rem;color:var(--border);letter-spacing:.05em;user-select:none;}
+
+/* Lower footer bar — logo, nav links, and copyright in a space-between flex row */
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 2.5rem;flex-wrap:wrap;gap:1rem;}
+.foot-logo{font-family:var(--display);font-size:1.1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+
+/* Footer nav links */
+.foot-nav{display:flex;gap:2rem;list-style:none;}
+.foot-nav a{text-decoration:none;color:var(--muted);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;transition:color .2s;}
+.foot-nav a:hover{color:var(--accent);}
+
+/* Copyright text — very muted, barely visible, uses border colour */
+.foot-copy{font-size:.62rem;letter-spacing:.1em;color:var(--border);text-transform:uppercase;}
+
+
+/* ============================================================
+   RESPONSIVE — MOBILE OVERRIDES
+   Everything below 900px wide switches to single-column layouts.
+   ============================================================ */
+
+@media(max-width:900px){
+
+  /* Hero and about hero collapse to single column — no more side-by-side */
+  .hero,.about-hero{grid-template-columns:1fr;}
+
+  /* Hide the image columns on mobile — text content is prioritised */
+  .hero-r{display:none;}
+  .about-r{display:none;}
+
+  /* All two-column sections collapse to one column */
+  .craft-intro,.about-story,.js-top,.contact-body{grid-template-columns:1fr;}
+
+  /* When columns collapse, the right border on left panels becomes a bottom border
+     so sections are still visually separated when stacked vertically */
+  .ci-label,.js-head,.contact-l{border-right:none;border-bottom:1px solid var(--border);}
+
+  /* Skills and process grids drop to two columns instead of four */
+  .skill-grid,.proc-grid{grid-template-columns:1fr 1fr;}
+
+  /* Cells that previously had right borders now use bottom borders in a column layout */
+  .skill-cell,.proc-cell{border-right:none;border-bottom:1px solid var(--border);}
+
+  /* All gallery row layouts become single column on mobile */
+  .gallery-row.r-big,.gallery-row.r-3{grid-template-columns:1fr;}
+  .gallery-row.r-2{grid-template-columns:1fr;}
+
+  /* Home page gallery preview also goes single column */
+  .gp-grid{grid-template-columns:1fr;}
+  .gp-cell{border-right:none;border-bottom:1px solid var(--border);}
+
+  /* Languages grid collapses to single column */
+  .langs-grid{grid-template-columns:1fr;}
+  .lang-cell{border-right:none;border-bottom:1px solid var(--border);}
+
+  /* Footer top collapses to single column and hides the decorative monogram */
+  .foot-top{grid-template-columns:1fr;}
+  .foot-r{display:none;}
+
+  /* Work page intro collapses */
+  .work-intro{grid-template-columns:1fr;}
+  .wi-label{border-right:none;border-bottom:1px solid var(--border);}
+
+  /* Education and work entries collapse — date sits above body instead of beside it */
+  .edu-entry,.work-entry{grid-template-columns:1fr;}
+  .edu-date,.work-date{border-right:none;border-bottom:1px solid var(--border);}
+
+  /* Show the hamburger icon on mobile */
+  .hamburger{display:flex;}
 
-/* Scroll Animations */
-@media (prefers-reduced-motion: no-preference) {
-    .skill-card {
-        animation: slideInUp 0.6s ease-out both;
-    }
-    
-    .skill-card:nth-child(1) { animation-delay: 0.1s; }
-    .skill-card:nth-child(2) { animation-delay: 0.2s; }
-    .skill-card:nth-child(3) { animation-delay: 0.3s; }
-    .skill-card:nth-child(4) { animation-delay: 0.4s; }
-    
-    .project-card {
-        animation: slideInUp 0.6s ease-out both;
-    }
-    
-    .project-card:nth-child(1) { animation-delay: 0.1s; }
-    .project-card:nth-child(2) { animation-delay: 0.2s; }
-    .project-card:nth-child(3) { animation-delay: 0.3s; }
-    .project-card:nth-child(4) { animation-delay: 0.4s; }
-    .project-card:nth-child(5) { animation-delay: 0.5s; }
-    .project-card:nth-child(6) { animation-delay: 0.6s; }
+  /* Hide the desktop nav links and CTA button — replaced by the mobile dropdown */
+  .nav-links,.btn-nav{display:none;}
 }
