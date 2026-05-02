@@ -205,10 +205,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content
 .gallery-row.r-3{grid-template-columns:1fr 1fr 1fr;}
 .gallery-row.r-big{grid-template-columns:2fr 1fr;}
 .gallery-row:last-child{border-bottom:none;}
-.g-cell{border-right:1px solid var(--border);overflow:hidden;position:relative;}
+.g-cell{border-right:1px solid var(--border);overflow:hidden;position:relative;height:220px;transition:height .5s cubic-bezier(.4,0,.2,1);}
 .g-cell:last-child{border-right:none;}
+.g-cell:hover{height:780px;}
+.g-cell--tall:hover{height:1100px;}
 .g-cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s;}
-.g-cell:hover img{transform:scale(1.04);}
+.g-cell:hover img{transform:scale(1.03);}
 .g-caption{position:absolute;bottom:0;left:0;right:0;padding:1.5rem;background:linear-gradient(transparent,rgba(9,8,6,.9));transform:translateY(100%);transition:transform .35s;}
 .g-cell:hover .g-caption{transform:translateY(0);}
 .g-caption span{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text);}
@@ -616,14 +618,14 @@ footer{border-top:1px solid var(--border);}
           <!-- Feature image — larger on screen. style="min-height" ensures
                the cell is always tall enough even if the image is slow to load -->
           <div class="g-cell">
-            <img src="pictures/staircase1.jpg" alt="Staircase model with oiled treads and balustrade" style="min-height:460px;">
+            <img src="pictures/staircase1.jpg" alt="Staircase model with oiled treads and balustrade">
             <!-- Caption slides up from below on hover via CSS transform -->
             <div class="g-caption"><span>Staircase model — oiled treads &amp; balustrade</span></div>
           </div>
 
           <!-- Secondary image — narrower -->
           <div class="g-cell">
-            <img src="pictures/staircase2.jpg" alt="Staircase frame — newel post and balusters" style="min-height:460px;">
+            <img src="pictures/staircase2.jpg" alt="Staircase frame — newel post and balusters">
             <div class="g-caption"><span>Staircase frame — newel post &amp; balusters</span></div>
           </div>
 
@@ -647,13 +649,13 @@ footer{border-top:1px solid var(--border);}
         <!-- r-2 layout: two equal-width columns side by side -->
         <div class="gallery-row r-2 reveal">
 
-          <div class="g-cell">
-            <img src="pictures/cabinet1.jpg" alt="Pine cabinet — front view with framed door and drawer" style="min-height:380px;">
+          <div class="g-cell g-cell--tall">
+            <img src="pictures/cabinet1.jpg" alt="Pine cabinet — front view with framed door and drawer">
             <div class="g-caption"><span>Pine cabinet — framed door &amp; drawer, front view</span></div>
           </div>
 
-          <div class="g-cell">
-            <img src="pictures/cabinet2.jpg" alt="Pine cabinet — side view showing hinge detail" style="min-height:380px;">
+          <div class="g-cell g-cell--tall">
+            <img src="pictures/cabinet2.jpg" alt="Pine cabinet — side view showing hinge detail">
             <div class="g-caption"><span>Pine cabinet — hinge detail &amp; side profile</span></div>
           </div>
 
@@ -676,15 +678,15 @@ footer{border-top:1px solid var(--border);}
 
         <div class="gallery-row r-2 reveal">
 
-          <div class="g-cell">
-            <img src="pictures/door1.jpg" alt="3-panel pine door flat lay" style="min-height:400px;">
+          <div class="g-cell g-cell--tall">
+            <img src="pictures/door1.jpg" alt="3-panel pine door flat lay">
             <div class="g-caption"><span>3-panel pine door — flat lay</span></div>
           </div>
 
           <!-- The lectern/reading stand is grouped with doors as it uses similar
                raised-panel construction techniques -->
-          <div class="g-cell">
-            <img src="pictures/lectern.jpg" alt="Panelled lectern / reading stand in pine" style="min-height:400px;">
+          <div class="g-cell g-cell--tall">
+            <img src="pictures/lectern.jpg" alt="Panelled lectern / reading stand in pine">
             <div class="g-caption"><span>Panelled lectern — pine frame &amp; raised panel</span></div>
           </div>
 
